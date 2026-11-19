@@ -6,9 +6,11 @@ Usage: python3 make_short.py story.json out.mp4 [--models DIR] [--preview DIR]
 story.json
 {
   "title": "...",                      # YouTube title (not drawn)
+  "season": "winter",                  # winter | autumn | summer | rain | fog (outdoor ground + particles)
   "beats": [                           # one scene per beat, 1-2 short sentences each
     {"text": "If every phone in your town gets the same alert...",
-     "scene": "street",                # street town livingroom phone door window hallway bedroom forest
+     "scene": "street",                # see SCENES: street town livingroom phone door window hallway bedroom forest
+                                       #   road lake cabin basement kitchen cemetery bathroom campsite
      "overlay": {"type": "alert", "lines": ["DO NOT OPEN YOUR DOOR.", "NOT EVEN FOR FAMILY."], "red": [1]},
      "mood": "scared",                 # optional: character face (neutral/scared)
      "figure": true,                   # optional: show the lurking figure (window/door/hallway/bedroom/forest/livingroom)
@@ -117,7 +119,7 @@ def house(c, x, base, w, h, lit=False, snow=True):
     c.rect(x - w / 2, base - h, x + w / 2, base, WALL2 if lit else WALL)
     peak = base - h - w * 0.3 * c.ar
     c.poly([(x - w / 2 - w * 0.06, base - h), (x, peak), (x + w / 2 + w * 0.06, base - h)], ROOF)
-    if snow:
+    if snow and SEASON["caps"]:
         c.line([(x - w / 2 - w * 0.06, base - h), (x, peak), (x + w / 2 + w * 0.06, base - h)], (240, 242, 248), w * 0.035)
     ww, wh = w * 0.14, h * 0.24
     for wx in (x - w * 0.28, x + w * 0.28):
@@ -358,15 +360,170 @@ def sc_forest(c, beat, rng):
         shadow_figure(c, 0.52, 0.64, 0.09, eyes=True)
 
 
+def sc_road(c, beat, rng):
+    night_sky(c, rng)
+    c.gradient_band(0.42, SNOW_T, SNOW_B)
+    for x in np.arange(-0.05, 1.1, 0.06):
+        pine(c, x + rng.uniform(-0.01, 0.01), 0.43, rng.uniform(0.05, 0.08), (40, 46, 62))
+    c.poly([(0.48, 0.42), (0.52, 0.42), (1.1, 1.0), (-0.1, 1.0)], (58, 60, 72))
+    for i in range(10):
+        t0, t1 = (i / 10) ** 2, ((i + 0.5) / 10) ** 2
+        y0, y1 = 0.42 + 0.58 * t0, 0.42 + 0.58 * t1
+        c.poly([(0.5 - 0.002 - 0.02 * t0, y0), (0.5 + 0.002 + 0.02 * t0, y0), (0.5 + 0.002 + 0.02 * t1, y1), (0.5 - 0.002 - 0.02 * t1, y1)], (226, 196, 110))
+    c.poly([(0.34, 1.0), (0.48, 0.58), (0.52, 0.58), (0.66, 1.0)], (120, 116, 100))
+    c.glow(0.5, 0.75, 0.25, (255, 240, 190), 40)
+    c.rect(0.08, 0.84, 0.92, 1.02, (30, 32, 42), r=0.03)  # dashboard
+    c.rect(0.3, 0.86, 0.5, 0.9, (60, 64, 80), r=0.01)
+    if beat.get("figure", True):
+        shadow_figure(c, 0.5, 0.6, 0.08, eyes=True)
+
+
+def sc_lake(c, beat, rng):
+    night_sky(c, rng)
+    c.ell(0.72, 0.14, 0.06, 0.06 * c.ar, (226, 228, 220))
+    c.gradient_band(0.4, (30, 40, 70), (18, 24, 44))
+    for x in np.arange(-0.05, 1.1, 0.05):
+        pine(c, x + rng.uniform(-0.01, 0.01), 0.405, rng.uniform(0.05, 0.08), (22, 28, 40))
+    for i in range(12):
+        y = rng.uniform(0.43, 0.7)
+        c.rect(0.72 - 0.05 - y * 0.05, y, 0.72 + 0.05 + y * 0.05, y + 0.003, (120, 130, 160))
+    c.poly([(0.3, 1.0), (0.44, 0.55), (0.56, 0.55), (0.7, 1.0)], (96, 72, 54))
+    for i in range(12):
+        y = 0.55 + 0.45 * (i / 12) ** 1.3
+        w = 0.06 + 0.14 * (y - 0.55) / 0.45
+        c.rect(0.5 - w, y, 0.5 + w, y + 0.004, (70, 52, 40))
+    if beat.get("figure", True):
+        shadow_figure(c, 0.5, 0.57, 0.08, eyes=True)
+
+
+def sc_cabin(c, beat, rng):
+    night_sky(c, rng)
+    c.gradient_band(0.55, SNOW_T, SNOW_B)
+    for x in list(np.arange(-0.05, 0.25, 0.07)) + list(np.arange(0.78, 1.1, 0.07)):
+        pine(c, x, 0.6 + rng.uniform(0, 0.04), rng.uniform(0.25, 0.35), (24, 28, 40))
+    x, base, w, h = 0.5, 0.58, 0.46, 0.13
+    c.rect(x - w / 2, base - h, x + w / 2, base, (96, 66, 48))
+    for i in range(6):
+        c.rect(x - w / 2, base - h + i * h / 6, x + w / 2, base - h + i * h / 6 + 0.003, (76, 52, 38))
+    c.poly([(x - w / 2 - 0.03, base - h), (x, base - h - 0.1), (x + w / 2 + 0.03, base - h)], (50, 40, 36))
+    if SEASON["caps"]:
+        c.line([(x - w / 2 - 0.03, base - h), (x, base - h - 0.1), (x + w / 2 + 0.03, base - h)], (240, 242, 248), 0.012)
+    c.glow(x - 0.12, base - h * 0.55, 0.06, (255, 200, 120), 90)
+    c.rect(x - 0.16, base - h * 0.7, x - 0.08, base - h * 0.4, WIN_L)
+    c.rect(x + 0.04, base - h * 0.75, x + 0.12, base, (50, 36, 28))
+    if beat.get("figure", False):
+        shadow_figure(c, x - 0.12, base - h * 0.4, 0.05, col=(60, 36, 20))
+
+
+def sc_basement(c, beat, rng):
+    c.gradient_band(0, (34, 34, 40), (20, 20, 24))
+    for i in range(10):
+        y = 0.25 + i * 0.045
+        c.rect(0.05 + i * 0.045, y, 0.6 + i * 0.01, y + 0.012, (80, 62, 48))
+        c.rect(0.05 + i * 0.045, y + 0.012, 0.6 + i * 0.01, y + 0.045, (48, 40, 34))
+    c.rect(0, 0.7, 1, 1, (30, 30, 34))
+    c.line([(0.75, 0), (0.75, 0.22)], (60, 60, 60), 0.002)
+    c.glow(0.75, 0.24, 0.14, (255, 220, 150), 90)
+    c.ell(0.75, 0.24, 0.015, 0.015 * c.ar, (255, 236, 180))
+    c.rect(0.7, 0.55, 0.95, 0.72, (70, 60, 50))
+    if beat.get("figure", True):
+        shadow_figure(c, 0.3, 0.72, 0.22, col=(4, 4, 6), eyes=True)
+
+
+def sc_kitchen(c, beat, rng):
+    interior_wall(c)
+    c.rect(0, 0.5, 1, 0.66, (220, 222, 226))
+    c.rect(0, 0.49, 1, 0.51, (170, 172, 180))
+    for x in np.arange(0.02, 1, 0.24):
+        c.rect(x, 0.52, x + 0.22, 0.64, (196, 200, 206))
+        c.rect(x + 0.09, 0.55, x + 0.13, 0.556, (140, 144, 150))
+    for x in np.arange(0.02, 1, 0.24):
+        c.rect(x, 0.12, x + 0.22, 0.3, (196, 200, 206))
+    c.rect(0.62, 0.3, 0.92, 0.49, (230, 232, 236))
+    c.rect(0.4, 0.34, 0.58, 0.47, (60, 64, 80))  # microwave
+    mini_window(c, 0.1, 0.33, 0.34, 0.47, rng, figure=beat.get("figure", False))
+    person(c, 0.8, 0.86, 0.22, beat.get("mood", "neutral"))
+
+
+def sc_cemetery(c, beat, rng):
+    night_sky(c, rng)
+    c.ell(0.25, 0.15, 0.06, 0.06 * c.ar, (226, 228, 220))
+    c.gradient_band(0.5, SNOW_T, SNOW_B)
+    c.rect(0, 0.42, 1, 0.5, (30, 34, 48))
+    for x in np.arange(0.0, 1.0, 0.03):
+        c.rect(x, 0.36, x + 0.006, 0.5, (30, 32, 42))
+    c.rect(0, 0.38, 1, 0.386, (30, 32, 42))
+    for row, (y, s) in enumerate(((0.56, 0.6), (0.68, 0.8), (0.84, 1.1))):
+        for x in np.arange(0.08 + row * 0.05, 1.0, 0.26):
+            w, h = 0.07 * s, 0.09 * s
+            c.rect(x - w / 2, y - h * 0.7, x + w / 2, y, (110, 114, 130))
+            c.ell(x, y - h * 0.7, w / 2, w / 2 * c.ar * 0.8, (110, 114, 130))
+            c.rect(x - w * 0.3, y - h * 0.45, x + w * 0.3, y - h * 0.4, (80, 84, 100))
+    if beat.get("figure", True):
+        shadow_figure(c, 0.62, 0.62, 0.12, eyes=True)
+
+
+def sc_bathroom(c, beat, rng):
+    c.gradient_band(0, (180, 196, 200), (150, 166, 172))
+    for x in np.arange(0, 1, 0.08):
+        c.rect(x, 0, x + 0.002, 1, (160, 176, 180))
+    for y in np.arange(0, 1, 0.045):
+        c.rect(0, y, 1, y + 0.002, (160, 176, 180))
+    c.rect(0.18, 0.12, 0.82, 0.52, (90, 96, 104), r=0.02)
+    c.rect(0.2, 0.13, 0.8, 0.51, (56, 66, 78), r=0.015)
+    c.poly([(0.22, 0.14), (0.4, 0.14), (0.22, 0.4)], (70, 82, 96))
+    person_mirror = beat.get("figure", True)
+    if person_mirror:
+        shadow_figure(c, 0.62, 0.51, 0.26, col=(14, 16, 22), eyes=True)
+    c.rect(0.15, 0.6, 0.85, 0.66, (236, 238, 240), r=0.01)
+    c.rect(0.25, 0.66, 0.75, 1.0, (210, 214, 218))
+    c.rect(0.47, 0.56, 0.53, 0.6, (170, 174, 180))
+
+
+def sc_campsite(c, beat, rng):
+    night_sky(c, rng)
+    c.gradient_band(0.5, SNOW_T, SNOW_B)
+    for x in np.arange(-0.05, 1.1, 0.07):
+        pine(c, x + rng.uniform(-0.01, 0.01), 0.52 + rng.uniform(0, 0.03), rng.uniform(0.18, 0.26), (22, 26, 38))
+    c.poly([(0.08, 0.75), (0.3, 0.56), (0.52, 0.75)], (190, 110, 60))
+    c.poly([(0.26, 0.75), (0.3, 0.6), (0.34, 0.75)], (60, 36, 24))
+    c.glow(0.7, 0.76, 0.22, (255, 150, 60), 110)
+    for a in (-0.03, 0.03):
+        c.line([(0.7 - 0.05, 0.79 + a * 0.2), (0.7 + 0.05, 0.77 - a * 0.2)], (80, 50, 30), 0.012)
+    c.poly([(0.66, 0.78), (0.7, 0.7), (0.74, 0.78)], (255, 170, 60))
+    c.poly([(0.68, 0.78), (0.7, 0.73), (0.72, 0.78)], (255, 230, 140))
+    if beat.get("figure", True):
+        shadow_figure(c, 0.86, 0.6, 0.1, col=(10, 10, 14), eyes=True)
+
+
 SCENES = {"street": sc_street, "town": sc_town, "livingroom": sc_livingroom, "phone": sc_phone,
-          "door": sc_door, "window": sc_window, "hallway": sc_hallway, "bedroom": sc_bedroom, "forest": sc_forest}
-SNOWY = {"street", "town", "forest"}
+          "door": sc_door, "window": sc_window, "hallway": sc_hallway, "bedroom": sc_bedroom, "forest": sc_forest,
+          "road": sc_road, "lake": sc_lake, "cabin": sc_cabin, "basement": sc_basement, "kitchen": sc_kitchen,
+          "cemetery": sc_cemetery, "bathroom": sc_bathroom, "campsite": sc_campsite}
+OUTDOOR = {"street", "town", "forest", "road", "lake", "cabin", "cemetery", "campsite"}
+SNOWY = OUTDOOR  # scenes that get weather particles
+
+# season changes the outdoor ground, roof caps and the falling particles
+SEASONS = {
+    "winter": dict(ground=((226, 230, 240), (196, 202, 218)), caps=True, particle="snow"),
+    "autumn": dict(ground=((128, 86, 54), (92, 60, 40)), caps=False, particle="leaves"),
+    "summer": dict(ground=((52, 86, 66), (32, 56, 44)), caps=False, particle="fireflies"),
+    "rain":   dict(ground=((70, 78, 92), (44, 50, 62)), caps=False, particle="rain"),
+    "fog":    dict(ground=((96, 104, 112), (66, 72, 80)), caps=False, particle="none"),
+}
+SEASON = SEASONS["winter"]
+
+
+def set_season(name):
+    global SNOW_T, SNOW_B, SEASON
+    SEASON = SEASONS.get(name, SEASONS["winter"])
+    SNOW_T, SNOW_B = SEASON["ground"]
 
 
 def draw_scene(beat, seed):
     rng = random.Random(seed)
     name = beat.get("scene", "street")
-    c = Canvas(SKY_T, SKY_B) if name in SNOWY else Canvas((30, 28, 40), (20, 18, 28))
+    c = Canvas(SKY_T, SKY_B) if name in OUTDOOR else Canvas((30, 28, 40), (20, 18, 28))
     SCENES.get(name, sc_street)(c, beat, rng)
     return c.done()
 
@@ -555,7 +712,7 @@ def chunks_of(words, n=5):
     return out
 
 
-LOW_CAPS = {"livingroom", "bedroom", "door", "phone"}
+LOW_CAPS = {"livingroom", "bedroom", "door", "phone", "kitchen"}
 
 
 def write_ass(timing, beats, path):
@@ -604,9 +761,34 @@ class Snow:
         self.s, self.v, self.ph = r.uniform(2.5, 6.5, n), r.uniform(40, 110, n), r.random(n) * 6.28
 
     def draw(self, img, t):
-        d = ImageDraw.Draw(img)
+        kind = SEASON["particle"]
+        if kind == "none":
+            return
+        d = ImageDraw.Draw(img, "RGBA")
+        if kind == "rain":
+            ys = (self.y + self.v * 14 * t) % H
+            xs = (self.x - 0.25 * self.v * 14 * t) % W
+            for x, y, s in zip(xs, ys, self.s):
+                d.line([(x, y), (x - 8, y + 34 + 4 * s)], fill=(190, 200, 220, 150), width=2)
+            return
+        if kind == "fireflies":
+            for x, y, s, ph in zip(self.x, self.y, self.s, self.ph):
+                if y < H * 0.45:
+                    continue
+                a = int(120 + 120 * math.sin(t * 2 + ph * 3))
+                xx, yy = x + 30 * math.sin(t * 0.5 + ph), y + 20 * math.cos(t * 0.7 + ph)
+                d.ellipse([xx - s * 2.2, yy - s * 2.2, xx + s * 2.2, yy + s * 2.2], fill=(255, 230, 120, max(0, a // 4)))
+                d.ellipse([xx - s * 0.7, yy - s * 0.7, xx + s * 0.7, yy + s * 0.7], fill=(255, 240, 160, max(0, a)))
+            return
         ys = (self.y + self.v * t) % H
         xs = (self.x + 18 * np.sin(t * 0.8 + self.ph)) % W
+        if kind == "leaves":
+            cols = [(200, 110, 50), (170, 70, 40), (220, 160, 60)]
+            for j, (x, y, s) in enumerate(zip(xs, ys, self.s)):
+                a = t * 2 + self.ph[j]
+                dx, dy = s * 1.8 * math.cos(a), s * 0.9 * math.sin(a)
+                d.polygon([(x - dx, y - dy), (x + dy, y - dx * 0.4), (x + dx, y + dy), (x - dy, y + dx * 0.4)], fill=cols[j % 3])
+            return
         for x, y, s in zip(xs, ys, self.s):
             d.ellipse([x - s, y - s, x + s, y + s], fill=(240, 242, 250))
 
@@ -618,6 +800,7 @@ def ease(x):
 
 def render(story, out, models, preview_dir=None):
     beats = story["beats"]
+    set_season(story.get("season", "winter"))
     work = tempfile.mkdtemp(prefix="short_")
     wav, ass, amb = (os.path.join(work, n) for n in ("voice.wav", "caps.ass", "amb.wav"))
     timing, dur = narrate(beats, models, wav)
