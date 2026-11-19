@@ -4,6 +4,29 @@
  "season": "summer",
  "beats": [
   {
+   "text": "She knocked on my door all night, begging me to let her in. I'm glad I didn't.",
+   "scene": "door",
+   "figure": true,
+   "hook": true,
+   "overlay": {
+    "type": "alert",
+    "header": "Night Rule #3",
+    "lines": [
+     "Never open the door",
+     "before sunrise."
+    ],
+    "red": [
+     1
+    ]
+   },
+   "sfx": [
+    {
+     "name": "knock",
+     "at": 0.9
+    }
+   ]
+  },
+  {
    "text": "Last summer, I took a night job watching over Pine Lake Campground.",
    "scene": "lake",
    "figure": false,

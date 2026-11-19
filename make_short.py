@@ -14,7 +14,9 @@ story.json
      "overlay": {"type": "alert", "lines": ["DO NOT OPEN YOUR DOOR.", "NOT EVEN FOR FAMILY."], "red": [1]},
      "mood": "scared",                 # optional: character face (neutral/scared)
      "figure": true,                   # optional: show the lurking figure (window/door/hallway/bedroom/forest/livingroom)
-     "shake": true}                    # optional: camera shake (knocks, bangs)
+     "shake": true,                    # optional: camera shake + boom (knocks, bangs, twist)
+     "hook": true,                     # FIRST beat only: cold-open teaser (overlay instant, red flash, stinger)
+     "sfx": ["knock", {"name": "creak", "at": 0.5}]}  # optional extra sounds (see sfx.BANK); auto sounds are added from overlays/keywords
   ]
 }
 overlay types:
@@ -25,12 +27,16 @@ kokoro-v1.0.int8.onnx + voices-v1.0.bin; fonts/ with Anton + Montserrat.
 """
 import json, math, os, random, re, subprocess, sys, tempfile
 import numpy as np
+sys_path = __import__('sys').path
+sys_path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
+import sfx
+SFXBANK = sfx.BANK
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H, FPS = 1080, 1920, 30
 SS = 2            # supersampling for static art
 ZOOM = 1.08       # art is drawn this much larger for slow push-ins
-VOICE, SPEED = "am_michael", 0.98
+VOICE, SPEED = "am_echo", 1.08
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "fonts")
 
@@ -672,8 +678,9 @@ def narrate(beats, models, wav_path):
     from kokoro_onnx import Kokoro
     import soundfile as sf
     k = Kokoro(os.path.join(models, "kokoro-v1.0.int8.onnx"), os.path.join(models, "voices-v1.0.bin"))
-    sr, t = 24000, 0.2
-    pieces, out = [np.zeros(int(sr * 0.2), np.float32)], []
+    lead = 0.7 if beats and beats[0].get("hook") else 0.2
+    sr, t = 24000, lead
+    pieces, out = [np.zeros(int(sr * lead), np.float32)], []
     for b in beats:
         start, sents = t, []
         for s in [x for x in re.split(r"(?<=[.!?…])[\"”']?\s+", b["text"].strip()) if x]:
@@ -748,13 +755,56 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     open(path, "w").write(head + "\n".join(ev) + "\n")
 
 
-def drone(dur, path):
-    flt = (f"anoisesrc=d={dur}:c=brown:a=0.4:r=48000,lowpass=f=260,volume=0.3[n];"
-           f"sine=f=55:d={dur}:r=48000,volume=0.4[s1];sine=f=58.2:d={dur}:r=48000,volume=0.35[s2];"
-           f"sine=f=220.4:d={dur}:r=48000,volume=0.03[s3];"
-           f"[n][s1][s2][s3]amix=inputs=4:normalize=0,tremolo=f=0.12:d=0.5,"
-           f"afade=t=in:d=1.5,afade=t=out:st={max(0, dur - 1.5)}:d=1.5,aformat=channel_layouts=stereo")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-filter_complex", flt, path], check=True)
+KEYWORD_SFX = [(r"\bknock", "knock"), (r"\bcreak|door (slowly )?open|opened the door", "creak"),
+               (r"footstep|\bsteps\b", "footsteps"), (r"heart", "heartbeat"), (r"static|radio|tv\b", "static"),
+               (r"buzz", "buzz")]
+
+
+def sound_events(beats, timing):
+    """Pick sound effects automatically from each beat (plus explicit beat['sfx'])."""
+    ev = []
+    for i, (b, tm) in enumerate(zip(beats, timing)):
+        s = tm["start"]
+        o = (b.get("overlay") or {}).get("type")
+        if b.get("hook"):
+            ev.append(("stinger", 0.0))
+        elif i > 0 and b.get("scene") != beats[i - 1].get("scene"):
+            ev.append(("whoosh", max(0, s - 0.25)))
+        if o == "alert":
+            ev.append(("alert", s + 0.1))
+        elif o == "text":
+            ev.append(("notify", s + 0.1))
+        if b.get("shake") and not b.get("hook"):
+            ev.append(("boom", s))
+        low = b["text"].lower()
+        if "sfx" not in b:
+            for pat, name in KEYWORD_SFX:
+                if re.search(pat, low) and not (name == "buzz" and o == "text"):
+                    ev.append((name, s + 0.25)); break
+        for x in b.get("sfx", []):
+            name, at = (x, 0.1) if isinstance(x, str) else (x.get("name"), x.get("at", 0.1))
+            if name in SFXBANK:
+                ev.append((name, s + at))
+        if i == len(beats) - 1 and len(beats) > 1:
+            ev.append(("riser", max(0, s - 2.0)))
+            if not b.get("shake"):
+                ev.append(("boom", s))
+    return ev
+
+
+def mix_audio(beats, timing, dur, voice_wav, out_wav):
+    import soundfile as sf
+    SR = sfx.SR
+    n = int(SR * dur) + SR
+    bed = np.zeros(n, np.float32)
+    amb = sfx.ambience(dur)
+    bed[:len(amb)] += amb * 0.55
+    for name, at in sound_events(beats, timing):
+        x = SFXBANK[name]() * sfx.GAIN[name]
+        o = int(at * SR)
+        if o < n:
+            seg = bed[o:o + len(x)]; seg += x[:len(seg)]
+    sf.write(out_wav, bed[:int(SR * dur)], SR)
 
 
 # ------------------------------------------------------------------ render
@@ -809,7 +859,7 @@ def render(story, out, models, preview_dir=None):
     wav, ass, amb = (os.path.join(work, n) for n in ("voice.wav", "caps.ass", "amb.wav"))
     timing, dur = narrate(beats, models, wav)
     write_ass(timing, beats, ass)
-    drone(dur, amb)
+    mix_audio(beats, timing, dur, wav, amb)
     seed0 = sum(map(ord, story.get("title", "x")))
     arts = [draw_scene(b, seed0 + i) for i, b in enumerate(beats)]
     last_time = "3:00"
@@ -822,6 +872,7 @@ def render(story, out, models, preview_dir=None):
     ovs = [build_overlay(b) for b in beats]
     snow = Snow(seed0)
     n = int(round(dur * FPS))
+    timing[0]["start"] = 0.0
     bidx = np.zeros(n, int)
     for i, tm in enumerate(timing):
         bidx[min(n - 1, int(tm["start"] * FPS)):] = i
@@ -837,7 +888,7 @@ def render(story, out, models, preview_dir=None):
         k = 1 - z * (0.1 + 0.9 * p) if i % 2 == 0 else 1 - z * (1 - 0.9 * p)
         cw, ch = art.width * k, art.height * k
         x0, y0 = (art.width - cw) / 2, (art.height - ch) / 2
-        if b.get("shake") and lt < 1.0:
+        if (b.get("shake") or b.get("hook")) and lt < 1.0:
             a = 16 * (1.0 - lt)
             x0 = min(max(0, x0 + a * math.sin(lt * 70)), art.width - cw)
             y0 = min(max(0, y0 + a * math.cos(lt * 53)), art.height - ch)
@@ -848,13 +899,16 @@ def render(story, out, models, preview_dir=None):
         if base is not None:
             img.alpha_composite(base)
         if ov is not None:
-            e = ease((lt - 0.1) / 0.3)
+            e = 1.0 if b.get("hook") else ease((lt - 0.1) / 0.3)
             if e > 0:
                 s = 0.88 + 0.12 * e
                 o2 = ov if e >= 1 else ov.resize((max(1, int(ov.width * s)), max(1, int(ov.height * s))), Image.BILINEAR)
                 if e < 1:
                     a = np.asarray(o2).copy(); a[..., 3] = (a[..., 3] * e).astype(np.uint8); o2 = Image.fromarray(a)
                 img.alpha_composite(o2, (int(pos[0] + (ov.width - o2.width) / 2), int(pos[1] + (ov.height - o2.height) / 2)))
+        if b.get("hook") and lt < 0.9:  # red flash pulses on the cold open
+            a = int(150 * (1 - lt / 0.9) * (0.6 + 0.4 * math.cos(lt * 25)))
+            img.alpha_composite(Image.new("RGBA", img.size, (170, 0, 0, max(0, a))))
         return img.convert("RGB")
 
     if preview_dir:
@@ -875,7 +929,7 @@ def render(story, out, models, preview_dir=None):
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-i", wav, "-i", amb, "-filter_complex",
            f"[0:v]ass={ass}:fontsdir={FONTS},format=yuv420p[v];"
-           f"[1:a]aresample=48000,aecho=0.8:0.6:45:0.12[vo];[2:a]volume=0.18[am];"
+           f"[1:a]aresample=48000,aecho=0.8:0.6:45:0.12,volume=1.0[vo];[2:a]volume=0.5[am];"
            f"[vo][am]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]",
            "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
            "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp]
