@@ -1,0 +1,20 @@
+{
+  "title": "If Your Town Sign Changes Overnight… Don't Count #shorts #scarystories",
+  "description": "The number on the sign keeps going down.\n\nFollow for a new scary story every night.\n\n#scarystory #horrorstories #creepy #shorts",
+  "beats": [
+    {"text": "If the sign outside your town changes its number overnight…", "scene": "town",
+     "overlay": {"type": "sign", "name": "Hollow Creek", "sub": "Pop. 413"}},
+    {"text": "Don't try to find out who's missing.", "scene": "street"},
+    {"text": "On Monday morning, the sign said 412. Nobody in town seemed to notice.", "scene": "livingroom",
+     "overlay": {"type": "clock", "time": "6:40 AM"}},
+    {"text": "That night, every phone got the same message.", "scene": "phone",
+     "overlay": {"type": "alert", "header": "Town Notice", "lines": ["Population updated.", "Stay home after dark."], "red": [1], "time": "9:02"}},
+    {"text": "Tuesday, it said 411.", "scene": "town",
+     "overlay": {"type": "sign", "name": "Hollow Creek", "sub": "Pop. 411"}},
+    {"text": "And the house across the street went completely dark.", "scene": "window", "figure": true},
+    {"text": "At 11:52 PM, your dad texts you from the kitchen.", "scene": "phone",
+     "overlay": {"type": "text", "from": "Dad", "message": "Did you count us tonight? There should be four.", "time": "11:52"}},
+    {"text": "There are only three people in your family.", "scene": "bedroom", "mood": "scared", "figure": false},
+    {"text": "And someone at the bottom of the stairs just whispered… four.", "scene": "hallway", "figure": true, "shake": true}
+  ]
+}
