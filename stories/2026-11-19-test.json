@@ -1,0 +1,19 @@
+{
+  "title": "If Your Mom Texts You From Downstairs at 3 AM… Don't Answer #scarystories #horror #shorts",
+  "beats": [
+    {"text": "If your mom texts you at 3 AM asking you to come downstairs…", "scene": "phone",
+     "overlay": {"type": "text", "from": "Mom", "message": "Can you come downstairs? I need help.", "time": "3:07"}},
+    {"text": "Don't go.", "scene": "bedroom", "mood": "scared", "figure": false},
+    {"text": "This is Cedar Falls. A quiet town where nothing ever happens.", "scene": "town",
+     "overlay": {"type": "sign", "name": "Cedar Falls", "sub": "Pop. 612"}},
+    {"text": "It's 3:07 AM. Your house is silent.", "scene": "livingroom",
+     "overlay": {"type": "clock", "time": "3:07 AM"}},
+    {"text": "Then your phone buzzes again.", "scene": "phone",
+     "overlay": {"type": "text", "from": "Mom", "message": "Please hurry. Don't turn on the lights.", "time": "3:08"}},
+    {"text": "You start down the hallway. The kitchen door is open.", "scene": "hallway", "figure": false},
+    {"text": "Something is standing in the doorway, waiting for you.", "scene": "hallway", "figure": true},
+    {"text": "Then a second alert lights up your screen.", "scene": "phone",
+     "overlay": {"type": "alert", "header": "Emergency Alert", "lines": ["Stay in your room.", "It can copy voices.", "It can copy texts."], "red": [1, 2]}},
+    {"text": "And your mom… is sleeping right next to you.", "scene": "bedroom", "mood": "scared", "figure": true, "shake": true}
+  ]
+}
