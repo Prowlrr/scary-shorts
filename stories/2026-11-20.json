@@ -3,205 +3,45 @@
  "description": "Count the tents at midnight. There are always twelve.\n\nFollow for a new scary story every night.\n\n#scarystory #horrorstories #creepy #shorts",
  "season": "summer",
  "beats": [
-  {
-   "text": "She knocked on my door all night, begging me to let her in. I'm glad I didn't.",
-   "scene": "door",
-   "figure": true,
-   "hook": true,
-   "overlay": {
-    "type": "alert",
-    "header": "Night Rule #3",
-    "lines": [
-     "Never open the door",
-     "before sunrise."
-    ],
-    "red": [
-     1
-    ]
-   },
-   "sfx": [
-    {
-     "name": "knock",
-     "at": 0.9
-    }
-   ]
-  },
-  {
-   "text": "Last summer, I took a night job watching over Pine Lake Campground.",
-   "scene": "lake",
-   "figure": false,
-   "overlay": {
-    "type": "sign",
-    "name": "Pine Lake",
-    "sub": "Campground"
-   }
-  },
-  {
-   "text": "The owner gave me a little cabin by the water. And one rule.",
-   "scene": "cabin"
-  },
-  {
-   "text": "He made me save it on my phone.",
-   "scene": "phone",
-   "overlay": {
-    "type": "alert",
-    "header": "Night Rules",
-    "lines": [
-     "Count the tents at midnight.",
-     "There are always twelve.",
-     "If there are thirteen,",
-     "stay inside until sunrise."
-    ],
-    "red": [
-     2,
-     3
-    ],
-    "time": "9:15"
-   }
-  },
-  {
-   "text": "The first few weeks were quiet. Families. Campfires. Kids roasting marshmallows.",
-   "scene": "campsite",
-   "figure": false
-  },
-  {
-   "text": "Every night at midnight, I walked the shore and counted. Twelve tents. Always twelve.",
-   "scene": "campsite",
-   "figure": false,
-   "overlay": {
-    "type": "clock",
-    "time": "12:00 AM"
-   }
-  },
-  {
-   "text": "Then came the last night of August. Almost everyone had gone home.",
-   "scene": "forest",
-   "figure": false
-  },
-  {
-   "text": "Only one family was left. But when I counted, I got thirteen.",
-   "scene": "campsite",
-   "figure": false,
-   "overlay": {
-    "type": "clock",
-    "time": "12:04 AM"
-   }
-  },
-  {
-   "text": "The new tent stood right at the edge of the water. No car. No fire. No footprints.",
-   "scene": "campsite",
-   "figure": false,
-   "overlay": {
-    "type": "label",
-    "text": "Tent 13"
-   }
-  },
-  {
-   "text": "My phone buzzed. It was the owner.",
-   "scene": "phone",
-   "overlay": {
-    "type": "text",
-    "from": "Mr. Hale",
-    "message": "Did you count yet?",
-    "time": "12:06"
-   }
-  },
-  {
-   "text": "I told him thirteen, and asked if I should check on it.",
-   "scene": "phone",
-   "overlay": {
-    "type": "text",
-    "from": "Me",
-    "message": "Thirteen. Should I go look?"
-   }
-  },
-  {
-   "text": "His answer came instantly.",
-   "scene": "phone",
-   "shake": true,
-   "overlay": {
-    "type": "text",
-    "from": "Mr. Hale",
-    "message": "NO. Lock your door. Don't open it for anyone until sunrise."
-   }
-  },
-  {
-   "text": "So I locked myself in the cabin, sat by the door, and waited.",
-   "scene": "door",
-   "figure": false
-  },
-  {
-   "text": "At two in the morning, someone knocked. Three slow knocks.",
-   "scene": "door",
-   "figure": true,
-   "shake": true,
-   "overlay": {
-    "type": "clock",
-    "time": "2:00 AM"
-   }
-  },
-  {
-   "text": "Then a little girl's voice said, please let me in. I can't find my mom.",
-   "scene": "door",
-   "figure": true
-  },
-  {
-   "text": "I looked out the window. A small figure stood on the dock, soaking wet.",
-   "scene": "window",
-   "figure": true
-  },
-  {
-   "text": "She knocked until dawn. I didn't open the door. I didn't sleep.",
-   "scene": "bedroom",
-   "mood": "scared",
-   "figure": false
-  },
-  {
-   "text": "At sunrise, the thirteenth tent was gone. So was the last family.",
-   "scene": "lake",
-   "figure": false
-  },
-  {
-   "text": "Three days later, I saw their faces on the news.",
-   "scene": "livingroom",
-   "mood": "scared",
-   "overlay": {
-    "type": "alert",
-    "header": "Missing Family",
-    "lines": [
-     "The Moore family, 3 people.",
-     "Last seen at Pine Lake."
-    ],
-    "red": [
-     1
-    ]
-   }
-  },
-  {
-   "text": "I quit that morning, and drove away without looking back.",
-   "scene": "road",
-   "figure": false
-  },
-  {
-   "text": "A week later, the owner sent me one last message.",
-   "scene": "phone",
-   "overlay": {
-    "type": "text",
-    "from": "Mr. Hale",
-    "message": "Thank you for keeping the door shut. The guard before you opened it.",
-    "time": "8:41"
-   }
-  },
-  {
-   "text": "I never found out what happened to that guard.",
-   "scene": "kitchen",
-   "mood": "scared"
-  },
-  {
-   "text": "But this summer, Pine Lake is hiring again. And they're looking for two.",
-   "scene": "lake",
-   "figure": true,
-   "shake": true
-  }
+  {"text": "She knocked on my door all night, begging me to let her in. I'm glad I didn't.", "scene": "door", "figure": true, "hook": true,
+   "overlay": {"type": "alert", "header": "Night Rule #3", "lines": ["Never open the door", "before sunrise."], "red": [1]}, "sfx": [{"name": "knock", "at": 0.9}]},
+  {"text": "Last summer, I took a night job at Pine Lake Campground.", "scene": "lake", "figure": false, "people": 2,
+   "overlay": {"type": "sign", "name": "Pine Lake", "sub": "Campground"}},
+  {"text": "The owner, Mr. Hale, gave me a little cabin by the water.", "scene": "cabin", "people": 2},
+  {"text": "And one rule, that he made me save on my phone.", "scene": "phone",
+   "overlay": {"type": "alert", "header": "Night Rules", "lines": ["Count the tents at midnight.", "There are always twelve.", "If there are thirteen,", "stay inside until sunrise."], "red": [2, 3], "time": "9:15"}},
+  {"text": "The first few weeks were perfect.", "scene": "campsite", "figure": false, "people": 3},
+  {"text": "Families everywhere. Campfires. Kids roasting marshmallows.", "scene": "street", "people": 4},
+  {"text": "Every night at midnight, I walked the shore and counted.", "scene": "lake", "figure": false, "people": 0,
+   "overlay": {"type": "clock", "time": "12:00 AM"}},
+  {"text": "Twelve tents. Always twelve.", "scene": "campsite", "figure": false, "people": 2},
+  {"text": "Then came the last night of August.", "scene": "forest", "figure": false},
+  {"text": "Almost everyone had gone home. Only one family was left.", "scene": "campsite", "figure": false, "people": 3},
+  {"text": "But when I counted, I got thirteen.", "scene": "campsite", "figure": false, "people": 0, "shake": true,
+   "overlay": {"type": "clock", "time": "12:04 AM"}},
+  {"text": "The new tent stood at the edge of the water. No car. No fire. No footprints.", "scene": "campsite", "figure": true, "people": 0,
+   "overlay": {"type": "label", "text": "Tent 13"}},
+  {"text": "My phone buzzed. It was Mr. Hale.", "scene": "phone",
+   "overlay": {"type": "text", "from": "Mr. Hale", "message": "Did you count yet?", "time": "12:06"}},
+  {"text": "I told him thirteen.", "scene": "phone",
+   "overlay": {"type": "text", "from": "Me", "message": "Thirteen. Should I go look?"}},
+  {"text": "His answer came instantly.", "scene": "phone", "shake": true,
+   "overlay": {"type": "text", "from": "Mr. Hale", "message": "NO. Lock your door. Don't open it for anyone until sunrise."}},
+  {"text": "So I locked myself in the cabin, and turned off the lights.", "scene": "livingroom", "mood": "scared", "people": 0, "flicker": true},
+  {"text": "At two in the morning, someone knocked. Three slow knocks.", "scene": "door", "figure": true, "shake": true,
+   "overlay": {"type": "clock", "time": "2:00 AM"}},
+  {"text": "Then a little girl's voice said, please let me in. I can't find my mom.", "scene": "door", "figure": true},
+  {"text": "I looked out the window.", "scene": "window", "figure": false},
+  {"text": "A small figure stood on the dock, soaking wet, staring right at me.", "scene": "window", "figure": true, "shake": true},
+  {"text": "Her smile was far too wide.", "scene": "face"},
+  {"text": "She knocked until dawn. I didn't open the door. I didn't sleep.", "scene": "bedroom", "mood": "scared", "figure": false},
+  {"text": "At sunrise, the thirteenth tent was gone. So was the last family.", "scene": "lake", "figure": false, "people": 0},
+  {"text": "Three days later, their faces were all over the news.", "scene": "livingroom", "mood": "scared", "people": 1,
+   "overlay": {"type": "alert", "header": "Missing Family", "lines": ["The Moore family, 3 people.", "Last seen at Pine Lake."], "red": [1]}},
+  {"text": "I quit that morning, and drove away without looking back.", "scene": "road", "figure": false},
+  {"text": "A week later, Mr. Hale sent me one last message.", "scene": "phone",
+   "overlay": {"type": "text", "from": "Mr. Hale", "message": "Thank you for keeping the door shut. The guard before you opened it.", "time": "8:41"}},
+  {"text": "Nobody ever found that guard.", "scene": "kitchen", "mood": "scared", "people": 1},
+  {"text": "But this summer, Pine Lake is hiring again. And they're looking for two.", "scene": "lake", "figure": true, "people": 0, "shake": true}
  ]
 }

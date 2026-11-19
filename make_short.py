@@ -35,7 +35,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H, FPS = 1080, 1920, 30
 SS = 2            # supersampling for static art
-ZOOM = 1.08       # art is drawn this much larger for slow push-ins
+ZOOM = 1.16       # art is drawn this much larger for camera moves
 VOICE, SPEED = "am_echo", 1.08
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "fonts")
@@ -153,35 +153,67 @@ def lamp_post(c, x, base, h):
     c.ell(x, base - h, 0.008, 0.008 * c.ar, (255, 232, 170))
 
 
-def person(c, x, base, h, mood="neutral"):
+SKINS = [(236, 200, 168), (198, 150, 112), (141, 96, 66), (250, 216, 190), (170, 120, 86)]
+HAIRS = [(34, 30, 34), (90, 60, 36), (196, 156, 86), (120, 44, 30), (60, 50, 46)]
+TOPS = [(140, 58, 58), (70, 112, 82), (164, 128, 66), (92, 92, 104), (112, 72, 124), (56, 96, 140), (200, 200, 206)]
+BOTTOMS = [(36, 40, 56), (60, 52, 44), (44, 60, 90), (30, 30, 34)]
+HERO = dict(skin=SKIN, hair=HAIR, top=JACKET, bottom=PANTS, style="short")
+
+
+def random_look(rng):
+    return dict(skin=rng.choice(SKINS), hair=rng.choice(HAIRS), top=rng.choice(TOPS), bottom=rng.choice(BOTTOMS),
+                style=rng.choice(["short", "short", "long", "long", "cap"]))
+
+
+def _shade(col, k):
+    return tuple(int(v * k) for v in col)
+
+
+def person(c, x, base, h, mood="neutral", look=None, seated=False, shade=1.0):
+    L = dict(HERO, **(look or {}))
+    sk, hr, top, bot = (_shade(L[k], shade) for k in ("skin", "hair", "top", "bottom"))
+    sleeve = _shade(tuple(int(v * 0.85) for v in L["top"]), shade)
+    ink = _shade(INK, shade)
     ar = c.ar
-    hw = h * 0.21 / ar * 1.0
+    hw = h * 0.21 / ar
     head_r = h * 0.085
-    c.rect(x - hw * 0.42, base - h * 0.42, x - hw * 0.06, base - h * 0.01, PANTS)
-    c.rect(x + hw * 0.06, base - h * 0.42, x + hw * 0.42, base - h * 0.01, PANTS)
-    c.rect(x - hw * 0.5, base - h * 0.03, x - hw * 0.02, base, INK)
-    c.rect(x + hw * 0.02, base - h * 0.03, x + hw * 0.5, base, INK)
-    c.rect(x - hw * 0.55, base - h * 0.8, x + hw * 0.55, base - h * 0.4, JACKET, r=0.01)
-    for s in (-1, 1):
-        c.rect(x + s * hw * 0.56, base - h * 0.78, x + s * hw * 0.8, base - h * 0.46, (50, 64, 98), r=0.006)
-        c.ell(x + s * hw * 0.68, base - h * 0.45, hw * 0.13, hw * 0.13 * ar, SKIN)
-    c.rect(x - hw * 0.12, base - h * 0.85, x + hw * 0.12, base - h * 0.78, SKIN)
-    hy = base - h * 0.84 - head_r
-    c.ell(x, hy, head_r / ar, head_r, SKIN)
-    c.ell(x, hy - head_r * 0.45, head_r / ar * 1.05, head_r * 0.62, HAIR)
-    c.ell(x, hy + head_r * 0.12, head_r / ar * 0.96, head_r * 0.72, SKIN)
+    bb = base + h * 0.1 if seated else base   # seated: hips lower, legs bent forward
+    if seated:
+        hip = base - h * 0.3
+        c.rect(x - hw * 0.45, hip - h * 0.08, x + hw * 1.5, hip + h * 0.01, bot)
+        c.rect(x + hw * 1.15, hip, x + hw * 1.5, base - h * 0.02, bot)
+        c.rect(x + hw * 1.1, base - h * 0.03, x + hw * 1.75, base, ink)
+    else:
+        c.rect(x - hw * 0.42, bb - h * 0.42, x - hw * 0.06, bb - h * 0.01, bot)
+        c.rect(x + hw * 0.06, bb - h * 0.42, x + hw * 0.42, bb - h * 0.01, bot)
+        c.rect(x - hw * 0.5, bb - h * 0.03, x - hw * 0.02, bb, ink)
+        c.rect(x + hw * 0.02, bb - h * 0.03, x + hw * 0.5, bb, ink)
+    if L["style"] == "long":
+        c.rect(x - head_r / ar * 1.0, bb - h * 0.95, x + head_r / ar * 1.0, bb - h * 0.68, hr, r=0.01)
+    c.rect(x - hw * 0.55, bb - h * 0.8, x + hw * 0.55, bb - h * 0.4, top, r=0.01)
+    for sgn in (-1, 1):
+        c.rect(x + sgn * hw * 0.56, bb - h * 0.78, x + sgn * hw * 0.8, bb - h * 0.46, sleeve, r=0.006)
+        c.ell(x + sgn * hw * 0.68, bb - h * 0.45, hw * 0.13, hw * 0.13 * ar, sk)
+    c.rect(x - hw * 0.12, bb - h * 0.85, x + hw * 0.12, bb - h * 0.78, sk)
+    hy = bb - h * 0.84 - head_r
+    c.ell(x, hy, head_r / ar, head_r, sk)
+    c.ell(x, hy - head_r * 0.45, head_r / ar * 1.05, head_r * 0.62, hr)
+    if L["style"] == "cap":
+        c.rect(x - head_r / ar * 1.05, hy - head_r * 0.75, x + head_r / ar * 1.05, hy - head_r * 0.3, top, r=0.006)
+        c.rect(x, hy - head_r * 0.45, x + head_r / ar * 1.6, hy - head_r * 0.3, top)
+    c.ell(x, hy + head_r * 0.12, head_r / ar * 0.96, head_r * 0.72, sk)
     ex, ey = head_r / ar * 0.36, hy + head_r * 0.08
     er = head_r * (0.14 if mood == "scared" else 0.09)
-    for s in (-1, 1):
+    for sgn in (-1, 1):
         if mood == "scared":
-            c.ell(x + s * ex, ey, er / ar, er, (255, 255, 255))
-            c.ell(x + s * ex, ey, er / ar * 0.45, er * 0.45, INK)
+            c.ell(x + sgn * ex, ey, er / ar, er, (255, 255, 255))
+            c.ell(x + sgn * ex, ey, er / ar * 0.45, er * 0.45, ink)
         else:
-            c.ell(x + s * ex, ey, er / ar * 0.6, er * 0.6, INK)
+            c.ell(x + sgn * ex, ey, er / ar * 0.6, er * 0.6, ink)
     if mood == "scared":
         c.ell(x, hy + head_r * 0.52, head_r / ar * 0.12, head_r * 0.14, (110, 46, 46))
     else:
-        c.line([(x - ex * 0.4, hy + head_r * 0.5), (x + ex * 0.4, hy + head_r * 0.5)], (150, 90, 80), 0.002)
+        c.line([(x - ex * 0.4, hy + head_r * 0.5), (x + ex * 0.4, hy + head_r * 0.5)], _shade((150, 90, 80), shade), 0.002)
 
 
 def shadow_figure(c, x, base, h, col=(14, 14, 22), eyes=False):
@@ -282,11 +314,11 @@ def sc_livingroom(c, beat, rng):
     door_shape(c, 0.6, 0.3, 0.9, 0.62)
     c.rect(-0.03, 0.56, 0.32, 0.66, (106, 150, 160), r=0.02)
     c.rect(-0.03, 0.52, 0.32, 0.58, (94, 136, 146), r=0.02)
-    c.line([(0.48, 0.63), (0.48, 0.47)], (60, 50, 40), 0.004)
-    c.rect(0.45, 0.625, 0.51, 0.635, (60, 50, 40))
-    c.glow(0.48, 0.45, 0.1, (255, 236, 180), 70)
-    c.poly([(0.44, 0.47), (0.52, 0.47), (0.505, 0.425), (0.455, 0.425)], (246, 236, 206))
-    person(c, 0.2, 0.8, 0.26, beat.get("mood", "neutral"))
+    c.line([(0.36, 0.63), (0.36, 0.47)], (60, 50, 40), 0.004)
+    c.rect(0.33, 0.625, 0.39, 0.635, (60, 50, 40))
+    c.glow(0.36, 0.45, 0.1, (255, 236, 180), 70)
+    c.poly([(0.32, 0.47), (0.4, 0.47), (0.385, 0.425), (0.335, 0.425)], (246, 236, 206))
+    person(c, 0.47, 0.82, 0.26, beat.get("mood", "neutral"))
 
 
 def sc_phone(c, beat, rng):
@@ -506,7 +538,48 @@ def sc_campsite(c, beat, rng):
         shadow_figure(c, 0.86, 0.6, 0.1, col=(10, 10, 14), eyes=True)
 
 
-SCENES = {"street": sc_street, "town": sc_town, "livingroom": sc_livingroom, "phone": sc_phone,
+def sc_face(c, beat, rng):
+    c.gradient_band(0, (14, 12, 18), (4, 4, 6))
+    c.glow(0.5, 0.42, 0.45, (70, 20, 24), 90)
+    ar = c.ar
+    c.ell(0.5, 0.42, 0.36, 0.36 * ar * 0.62, (6, 6, 8))
+    c.poly([(0.05, 1.02), (0.2, 0.66), (0.8, 0.66), (0.95, 1.02)], (6, 6, 8))
+    for sgn in (-1, 1):
+        c.glow(0.5 + sgn * 0.12, 0.4, 0.06, (255, 255, 255), 120)
+        c.ell(0.5 + sgn * 0.12, 0.4, 0.045, 0.02, (245, 245, 245))
+        c.ell(0.5 + sgn * 0.12, 0.4, 0.012, 0.012 * ar, (10, 10, 10))
+    if beat.get("smile", True):
+        pts = [(0.34 + 0.32 * i / 20, 0.5 + 0.035 * math.sin(math.pi * i / 20)) for i in range(21)]
+        c.d.line(c.P(pts), fill=(225, 220, 210), width=int(0.012 * c.w))
+        for i in range(1, 12):
+            x = 0.34 + 0.32 * i / 12
+            c.line([(x, 0.5 + 0.035 * math.sin(math.pi * i / 12) - 0.006), (x, 0.5 + 0.035 * math.sin(math.pi * i / 12) + 0.006)], (6, 6, 8), 0.003)
+
+
+# where extra people go: (x, feet_y, height, seated) per scene; default counts below
+SPOTS = {
+    "street": [(0.18, 0.555, 0.1, False), (0.3, 0.556, 0.065, False), (0.72, 0.555, 0.1, False), (0.84, 0.556, 0.1, False)],
+    "livingroom": [(0.04, 0.7, 0.2, True), (0.17, 0.7, 0.14, True)],
+    "kitchen": [(0.3, 0.86, 0.21, False), (0.16, 0.86, 0.13, False)],
+    "campsite": [(0.57, 0.84, 0.13, True), (0.83, 0.84, 0.13, True), (0.45, 0.87, 0.09, False)],
+    "lake": [(0.45, 0.72, 0.085, False), (0.53, 0.74, 0.06, False)],
+    "cabin": [(0.3, 0.6, 0.085, False), (0.74, 0.6, 0.085, False)],
+    "cemetery": [(0.3, 0.76, 0.12, False), (0.4, 0.77, 0.12, False), (0.47, 0.77, 0.08, False)],
+    "town": [(0.3, 0.56, 0.035, False), (0.6, 0.55, 0.035, False), (0.7, 0.57, 0.03, False)],
+    "bedroom": [(0.5, 0.86, 0.2, False)],
+}
+DEFAULT_PEOPLE = {"street": 3, "livingroom": 2, "kitchen": 1, "campsite": 3, "lake": 1, "cabin": 2, "town": 3}
+
+
+def add_people(c, beat, rng):
+    name = beat.get("scene", "street")
+    n = beat.get("people", DEFAULT_PEOPLE.get(name, 0))
+    shade = 0.62 if name in OUTDOOR else 0.95
+    for (x, y, h, sit) in SPOTS.get(name, [])[:max(0, int(n))]:
+        person(c, x, y, h, beat.get("crowd_mood", "neutral"), random_look(rng), seated=sit, shade=shade)
+
+
+SCENES = {"face": sc_face, "street": sc_street, "town": sc_town, "livingroom": sc_livingroom, "phone": sc_phone,
           "door": sc_door, "window": sc_window, "hallway": sc_hallway, "bedroom": sc_bedroom, "forest": sc_forest,
           "road": sc_road, "lake": sc_lake, "cabin": sc_cabin, "basement": sc_basement, "kitchen": sc_kitchen,
           "cemetery": sc_cemetery, "bathroom": sc_bathroom, "campsite": sc_campsite}
@@ -535,6 +608,7 @@ def draw_scene(beat, seed):
     name = beat.get("scene", "street")
     c = Canvas(SKY_T, SKY_B) if name in OUTDOOR else Canvas((30, 28, 40), (20, 18, 28))
     SCENES.get(name, sc_street)(c, beat, rng)
+    add_people(c, beat, random.Random(seed * 7 + 1))
     return c.done()
 
 
@@ -723,7 +797,11 @@ def chunks_of(words, n=5):
     return out
 
 
-LOW_CAPS = {"livingroom", "bedroom", "door", "phone", "kitchen"}
+RED_WORDS = {"dead", "death", "died", "blood", "scream", "screamed", "screaming", "knock", "knocked", "knocking",
+             "never", "nobody", "nothing", "gone", "missing", "vanished", "dark", "darkness", "eyes", "smile", "smiling",
+             "teeth", "whisper", "whispered", "behind", "wrong", "run", "ran", "help", "alone", "thirteen", "inside",
+             "watching", "staring", "body", "grave", "killed", "don't", "stop", "something", "someone"}
+LOW_CAPS = {"livingroom", "bedroom", "door", "phone", "kitchen", "face"}
 
 
 def write_ass(timing, beats, path):
@@ -750,7 +828,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             for j, c in enumerate(cs):
                 d = (t1 - t0) * (len(" ".join(c)) + 3) / tot
                 end = t + d if j < len(cs) - 1 else t1 + 0.18
-                ev.append(f"Dialogue: 0,{ass_time(t)},{ass_time(end)},Cap,,0,0,0,,{{\\pos(540,{y})}}{' '.join(c).upper()}")
+                words = []
+                for w in c:
+                    core = re.sub(r"[^a-z']", "", w.lower())
+                    words.append("{\\c&H3A3AE8&}" + w.upper() + "{\\c&HFFFFFF&}" if core in RED_WORDS else w.upper())
+                pop = "{\\fscx78\\fscy78\\t(0,70,\\fscx108\\fscy108)\\t(70,130,\\fscx100\\fscy100)}"
+                ev.append(f"Dialogue: 0,{ass_time(t)},{ass_time(end)},Cap,,0,0,0,,{{\\pos(540,{y})}}{pop}{' '.join(words)}")
                 t += d
     open(path, "w").write(head + "\n".join(ev) + "\n")
 
@@ -785,6 +868,10 @@ def sound_events(beats, timing):
             name, at = (x, 0.1) if isinstance(x, str) else (x.get("name"), x.get("at", 0.1))
             if name in SFXBANK:
                 ev.append((name, s + at))
+        for name, at in b.get("sfx_abs", []):
+            ev.append((name, at))
+        if b.get("scene") == "face":
+            ev.append(("stinger", s))
         if i == len(beats) - 1 and len(beats) > 1:
             ev.append(("riser", max(0, s - 2.0)))
             if not b.get("shake"):
@@ -859,7 +946,6 @@ def render(story, out, models, preview_dir=None):
     wav, ass, amb = (os.path.join(work, n) for n in ("voice.wav", "caps.ass", "amb.wav"))
     timing, dur = narrate(beats, models, wav)
     write_ass(timing, beats, ass)
-    mix_audio(beats, timing, dur, wav, amb)
     seed0 = sum(map(ord, story.get("title", "x")))
     arts = [draw_scene(b, seed0 + i) for i, b in enumerate(beats)]
     last_time = "3:00"
@@ -873,6 +959,21 @@ def render(story, out, models, preview_dir=None):
     snow = Snow(seed0)
     n = int(round(dur * FPS))
     timing[0]["start"] = 0.0
+    frng = np.random.default_rng(seed0)
+    flick, light = np.ones(n), np.zeros(n)
+    for i, (b, tm) in enumerate(zip(beats, timing)):
+        f0, f1 = int(tm["start"] * FPS), min(n, int(tm["end"] * FPS))
+        if b.get("flicker") or re.search(r"\blights?\b|lamp|power|flicker|bulb", b["text"].lower()):
+            for _ in range(3):
+                st = frng.integers(f0, max(f0 + 1, f1 - 4)); flick[st:st + frng.integers(2, 6)] = frng.uniform(0.25, 0.6)
+        if SEASON["particle"] == "rain" and b.get("scene") in OUTDOOR and frng.random() < 0.6:
+            st = frng.integers(f0, max(f0 + 1, f1 - 8))
+            light[st:st + 3] = 1.0; light[st + 3:st + 5] = 0.0; light[st + 5:st + 8] = 0.7
+            b.setdefault("_thunder", (st / FPS))
+    for b in beats:
+        if "_thunder" in b:
+            b.setdefault("sfx_abs", []).append(("boom", b["_thunder"] + 0.4))
+    mix_audio(beats, timing, dur, wav, amb)
     bidx = np.zeros(n, int)
     for i, tm in enumerate(timing):
         bidx[min(n - 1, int(tm["start"] * FPS)):] = i
@@ -885,10 +986,23 @@ def render(story, out, models, preview_dir=None):
         p = min(1.0, lt / max(0.5, tm["end"] - tm["start"]))
         art = arts[i]
         z = (1 - 1 / ZOOM)
-        k = 1 - z * (0.1 + 0.9 * p) if i % 2 == 0 else 1 - z * (1 - 0.9 * p)
-        cw, ch = art.width * k, art.height * k
-        x0, y0 = (art.width - cw) / 2, (art.height - ch) / 2
-        if (b.get("shake") or b.get("hook")) and lt < 1.0:
+        q = 1 - (1 - p) ** 2  # ease-out
+        move = (i + (0 if b.get("hook") else 1)) % 4
+        if b.get("scene") == "face":   # slow creep toward the face
+            k = 1 - z * (0.3 + 0.7 * q)
+            cw, ch = art.width * k, art.height * k
+            x0, y0 = (art.width - cw) / 2, (art.height - ch) / 2
+        elif move in (0, 1):            # push in / pull out
+            k = 1 - z * (0.15 + 0.85 * q) if move == 0 else 1 - z * (1 - 0.85 * q)
+            cw, ch = art.width * k, art.height * k
+            x0, y0 = (art.width - cw) / 2, (art.height - ch) / 2
+        else:                           # pan left->right / right->left
+            k = 1 - z * 0.75
+            cw, ch = art.width * k, art.height * k
+            span = art.width - cw
+            x0 = span * (0.1 + 0.8 * q) if move == 2 else span * (0.9 - 0.8 * q)
+            y0 = (art.height - ch) / 2
+        if (b.get("shake") or b.get("hook") or b.get("scene") == "face") and lt < 1.0:
             a = 16 * (1.0 - lt)
             x0 = min(max(0, x0 + a * math.sin(lt * 70)), art.width - cw)
             y0 = min(max(0, y0 + a * math.cos(lt * 53)), art.height - ch)
@@ -906,6 +1020,11 @@ def render(story, out, models, preview_dir=None):
                 if e < 1:
                     a = np.asarray(o2).copy(); a[..., 3] = (a[..., 3] * e).astype(np.uint8); o2 = Image.fromarray(a)
                 img.alpha_composite(o2, (int(pos[0] + (ov.width - o2.width) / 2), int(pos[1] + (ov.height - o2.height) / 2)))
+        fl = flick[f]
+        if fl < 1:
+            img = Image.blend(Image.new("RGBA", img.size, (0, 0, 0, 255)), img, fl)
+        if light[f] > 0:
+            img.alpha_composite(Image.new("RGBA", img.size, (225, 230, 255, int(170 * light[f]))))
         if b.get("hook") and lt < 0.9:  # red flash pulses on the cold open
             a = int(150 * (1 - lt / 0.9) * (0.6 + 0.4 * math.cos(lt * 25)))
             img.alpha_composite(Image.new("RGBA", img.size, (170, 0, 0, max(0, a))))
