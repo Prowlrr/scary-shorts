@@ -6,7 +6,7 @@ Usage: python3 make_short.py story.json out.mp4 [--models DIR] [--preview DIR]
 story.json
 {
   "title": "...",                      # YouTube title (not drawn)
-  "season": "winter",                  # winter | autumn | summer | rain | fog (outdoor ground + particles)
+  "season": "autumn",                  # autumn | summer | rain | fog (winter exists but isn't used)
   "beats": [                           # one scene per beat, 1-2 short sentences each
     {"text": "If every phone in your town gets the same alert...",
      "scene": "street",                # see SCENES: street town livingroom phone door window hallway bedroom forest
@@ -214,16 +214,20 @@ def sc_street(c, beat, rng):
 
 def sc_town(c, beat, rng):
     night_sky(c, rng)
-    c.poly([(-0.1, 0.33), (0.25, 0.2), (0.48, 0.3), (0.72, 0.19), (1.1, 0.33)], (150, 158, 182))
-    c.poly([(0.2, 0.235), (0.25, 0.2), (0.3, 0.235)], (225, 228, 238))
-    c.poly([(0.67, 0.225), (0.72, 0.19), (0.77, 0.225)], (225, 228, 238))
-    c.gradient_band(0.33, SNOW_T, SNOW_B)
-    for x in np.arange(0.0, 1.05, 0.045):
-        pine(c, x + rng.uniform(-0.01, 0.01), 0.345, rng.uniform(0.035, 0.05), (40, 46, 62))
-    pts = [(rng.uniform(0.03, 0.97), rng.uniform(0.37, 0.52)) for _ in range(26)]
+    c.ell(0.78, 0.13, 0.055, 0.055 * c.ar, (226, 228, 220))
+    c.poly([(-0.1, 0.36)] + [(x, 0.31 - 0.03 * math.sin(x * 5 + 1)) for x in np.arange(-0.1, 1.15, 0.05)] + [(1.1, 0.36)], (34, 40, 56))
+    c.gradient_band(0.35, SNOW_T, SNOW_B)
+    for x in np.arange(0.0, 1.05, 0.05):
+        pine(c, x + rng.uniform(-0.01, 0.01), 0.36, rng.uniform(0.03, 0.045), (26, 30, 42))
+    # water tower + church
+    c.rect(0.12, 0.27, 0.125, 0.36, (40, 44, 60)); c.rect(0.175, 0.27, 0.18, 0.36, (40, 44, 60))
+    c.ell(0.1525, 0.26, 0.05, 0.022, (70, 76, 96))
+    c.rect(0.8, 0.3, 0.86, 0.37, (70, 74, 92)); c.poly([(0.8, 0.3), (0.83, 0.25), (0.86, 0.3)], (50, 54, 70))
+    c.line([(0.83, 0.25), (0.83, 0.23)], (50, 54, 70), 0.003)
+    pts = [(rng.uniform(0.03, 0.97), rng.uniform(0.39, 0.54)) for _ in range(24)]
     for x, y in sorted(pts, key=lambda p: p[1]):
-        s = 0.5 + (y - 0.37) * 3.5
-        house(c, x, y, 0.07 * s, 0.025 * s, lit=rng.random() < 0.25)
+        s_ = 0.5 + (y - 0.37) * 3.5
+        house(c, x, y, 0.07 * s_, 0.025 * s_, lit=rng.random() < 0.3)
 
 
 def interior_wall(c, warm=True):
@@ -772,8 +776,8 @@ class Snow:
                 d.line([(x, y), (x - 8, y + 34 + 4 * s)], fill=(190, 200, 220, 150), width=2)
             return
         if kind == "fireflies":
-            for x, y, s, ph in zip(self.x, self.y, self.s, self.ph):
-                if y < H * 0.45:
+            for j, (x, y, s, ph) in enumerate(zip(self.x, self.y, self.s, self.ph)):
+                if y < H * 0.45 or j % 3:
                     continue
                 a = int(120 + 120 * math.sin(t * 2 + ph * 3))
                 xx, yy = x + 30 * math.sin(t * 0.5 + ph), y + 20 * math.cos(t * 0.7 + ph)
@@ -800,7 +804,7 @@ def ease(x):
 
 def render(story, out, models, preview_dir=None):
     beats = story["beats"]
-    set_season(story.get("season", "winter"))
+    set_season(story.get("season", "autumn"))
     work = tempfile.mkdtemp(prefix="short_")
     wav, ass, amb = (os.path.join(work, n) for n in ("voice.wav", "caps.ass", "amb.wav"))
     timing, dur = narrate(beats, models, wav)

@@ -1,20 +1,184 @@
 {
-  "title": "If Your Town Sign Changes Overnight… Don't Count #shorts #scarystories",
-  "description": "The number on the sign keeps going down.\n\nFollow for a new scary story every night.\n\n#scarystory #horrorstories #creepy #shorts",
-  "beats": [
-    {"text": "If the sign outside your town changes its number overnight…", "scene": "town",
-     "overlay": {"type": "sign", "name": "Hollow Creek", "sub": "Pop. 413"}},
-    {"text": "Don't try to find out who's missing.", "scene": "street"},
-    {"text": "On Monday morning, the sign said 412. Nobody in town seemed to notice.", "scene": "livingroom",
-     "overlay": {"type": "clock", "time": "6:40 AM"}},
-    {"text": "That night, every phone got the same message.", "scene": "phone",
-     "overlay": {"type": "alert", "header": "Town Notice", "lines": ["Population updated.", "Stay home after dark."], "red": [1], "time": "9:02"}},
-    {"text": "Tuesday, it said 411.", "scene": "town",
-     "overlay": {"type": "sign", "name": "Hollow Creek", "sub": "Pop. 411"}},
-    {"text": "And the house across the street went completely dark.", "scene": "window", "figure": true},
-    {"text": "At 11:52 PM, your dad texts you from the kitchen.", "scene": "phone",
-     "overlay": {"type": "text", "from": "Dad", "message": "Did you count us tonight? There should be four.", "time": "11:52"}},
-    {"text": "There are only three people in your family.", "scene": "bedroom", "mood": "scared", "figure": false},
-    {"text": "And someone at the bottom of the stairs just whispered… four.", "scene": "hallway", "figure": true, "shake": true}
-  ]
+ "title": "I Took a Night Job at a Lake Campground. There Was One Rule. #shorts #scarystories",
+ "description": "Count the tents at midnight. There are always twelve.\n\nFollow for a new scary story every night.\n\n#scarystory #horrorstories #creepy #shorts",
+ "season": "summer",
+ "beats": [
+  {
+   "text": "Last summer, I took a night job watching over Pine Lake Campground.",
+   "scene": "lake",
+   "figure": false,
+   "overlay": {
+    "type": "sign",
+    "name": "Pine Lake",
+    "sub": "Campground"
+   }
+  },
+  {
+   "text": "The owner gave me a little cabin by the water. And one rule.",
+   "scene": "cabin"
+  },
+  {
+   "text": "He made me save it on my phone.",
+   "scene": "phone",
+   "overlay": {
+    "type": "alert",
+    "header": "Night Rules",
+    "lines": [
+     "Count the tents at midnight.",
+     "There are always twelve.",
+     "If there are thirteen,",
+     "stay inside until sunrise."
+    ],
+    "red": [
+     2,
+     3
+    ],
+    "time": "9:15"
+   }
+  },
+  {
+   "text": "The first few weeks were quiet. Families. Campfires. Kids roasting marshmallows.",
+   "scene": "campsite",
+   "figure": false
+  },
+  {
+   "text": "Every night at midnight, I walked the shore and counted. Twelve tents. Always twelve.",
+   "scene": "campsite",
+   "figure": false,
+   "overlay": {
+    "type": "clock",
+    "time": "12:00 AM"
+   }
+  },
+  {
+   "text": "Then came the last night of August. Almost everyone had gone home.",
+   "scene": "forest",
+   "figure": false
+  },
+  {
+   "text": "Only one family was left. But when I counted, I got thirteen.",
+   "scene": "campsite",
+   "figure": false,
+   "overlay": {
+    "type": "clock",
+    "time": "12:04 AM"
+   }
+  },
+  {
+   "text": "The new tent stood right at the edge of the water. No car. No fire. No footprints.",
+   "scene": "campsite",
+   "figure": false,
+   "overlay": {
+    "type": "label",
+    "text": "Tent 13"
+   }
+  },
+  {
+   "text": "My phone buzzed. It was the owner.",
+   "scene": "phone",
+   "overlay": {
+    "type": "text",
+    "from": "Mr. Hale",
+    "message": "Did you count yet?",
+    "time": "12:06"
+   }
+  },
+  {
+   "text": "I told him thirteen, and asked if I should check on it.",
+   "scene": "phone",
+   "overlay": {
+    "type": "text",
+    "from": "Me",
+    "message": "Thirteen. Should I go look?"
+   }
+  },
+  {
+   "text": "His answer came instantly.",
+   "scene": "phone",
+   "shake": true,
+   "overlay": {
+    "type": "text",
+    "from": "Mr. Hale",
+    "message": "NO. Lock your door. Don't open it for anyone until sunrise."
+   }
+  },
+  {
+   "text": "So I locked myself in the cabin, sat by the door, and waited.",
+   "scene": "door",
+   "figure": false
+  },
+  {
+   "text": "At two in the morning, someone knocked. Three slow knocks.",
+   "scene": "door",
+   "figure": true,
+   "shake": true,
+   "overlay": {
+    "type": "clock",
+    "time": "2:00 AM"
+   }
+  },
+  {
+   "text": "Then a little girl's voice said, please let me in. I can't find my mom.",
+   "scene": "door",
+   "figure": true
+  },
+  {
+   "text": "I looked out the window. A small figure stood on the dock, soaking wet.",
+   "scene": "window",
+   "figure": true
+  },
+  {
+   "text": "She knocked until dawn. I didn't open the door. I didn't sleep.",
+   "scene": "bedroom",
+   "mood": "scared",
+   "figure": false
+  },
+  {
+   "text": "At sunrise, the thirteenth tent was gone. So was the last family.",
+   "scene": "lake",
+   "figure": false
+  },
+  {
+   "text": "Three days later, I saw their faces on the news.",
+   "scene": "livingroom",
+   "mood": "scared",
+   "overlay": {
+    "type": "alert",
+    "header": "Missing Family",
+    "lines": [
+     "The Moore family, 3 people.",
+     "Last seen at Pine Lake."
+    ],
+    "red": [
+     1
+    ]
+   }
+  },
+  {
+   "text": "I quit that morning, and drove away without looking back.",
+   "scene": "road",
+   "figure": false
+  },
+  {
+   "text": "A week later, the owner sent me one last message.",
+   "scene": "phone",
+   "overlay": {
+    "type": "text",
+    "from": "Mr. Hale",
+    "message": "Thank you for keeping the door shut. The guard before you opened it.",
+    "time": "8:41"
+   }
+  },
+  {
+   "text": "I never found out what happened to that guard.",
+   "scene": "kitchen",
+   "mood": "scared"
+  },
+  {
+   "text": "But this summer, Pine Lake is hiring again. And they're looking for two.",
+   "scene": "lake",
+   "figure": true,
+   "shake": true
+  }
+ ]
 }
