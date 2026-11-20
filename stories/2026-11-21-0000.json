@@ -1,0 +1,199 @@
+{
+ "style": "footage",
+ "title": "Our Baby Monitor Recorded Things That Hadn't Happened Yet #shorts #scarystories",
+ "description": "Every clip on the memory card was dated one day in the future.\n\nFollow for new scary stories every day.\n\n#scarystory #foundfootage #creepy #shorts",
+ "tape": {
+  "start": "02:58:41",
+  "date": "NOV 02 2025"
+ },
+ "ambience": "rain",
+ "beats": [
+  {
+   "text": "This footage came off our baby monitor's memory card.",
+   "scene": "black",
+   "mode": "card",
+   "hook": "card",
+   "card": "NURSERY CAM SD CARD. RECOVERED NOV 2025. EVERY FILE IS DATED ONE DAY AHEAD."
+  },
+  {
+   "text": "When our daughter Ivy was born, my wife Nora and I bought a cheap used baby monitor.",
+   "scene": "livingroom",
+   "mode": "nv",
+   "people": 2
+  },
+  {
+   "text": "It saved every night to a little memory card.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "people": 1
+  },
+  {
+   "text": "The first week was normal. Ivy slept. We didn't.",
+   "scene": "kitchen",
+   "mode": "nv",
+   "people": 2
+  },
+  {
+   "text": "Then one morning, I scrolled through the recordings.",
+   "scene": "kitchen",
+   "mode": "cctv",
+   "cam": "CAM 02 - KITCHEN",
+   "people": 1
+  },
+  {
+   "text": "At 3:12 AM, the crib was rocking. Slowly. By itself.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "zoom": true,
+   "sfx": [
+    "creak"
+   ]
+  },
+  {
+   "text": "Nora said it was the heater. I wanted to believe her.",
+   "scene": "livingroom",
+   "mode": "nv",
+   "people": 2
+  },
+  {
+   "text": "The next clip showed a dark shape standing by the crib.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "figure": "far",
+   "glitch": true
+  },
+  {
+   "text": "But at 3:12 that night, Ivy wasn't even in there. Nora was feeding her in the kitchen.",
+   "scene": "kitchen",
+   "mode": "nv",
+   "people": 2
+  },
+  {
+   "text": "Then I noticed the dates on the files.",
+   "scene": "black",
+   "mode": "card",
+   "card": "FILE 0047. RECORDED NOV 03, 3:12 AM. TODAY IS NOV 02."
+  },
+  {
+   "text": "Every clip was dated one day ahead.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "glitch": true
+  },
+  {
+   "text": "The monitor wasn't showing what happened. It showed what was going to happen.",
+   "scene": "hallway",
+   "mode": "flash",
+   "walk": true
+  },
+  {
+   "text": "At midnight, tomorrow's clip appeared.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "sfx": [
+    "notify"
+   ]
+  },
+  {
+   "text": "The shape leaned over the crib and reached in.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "figure": "near",
+   "zoom": true,
+   "sfx": [
+    "stinger"
+   ]
+  },
+  {
+   "text": "So the next night, Ivy slept in our bed, and I waited in the nursery with a flashlight.",
+   "scene": "room",
+   "mode": "flash",
+   "walk": true
+  },
+  {
+   "text": "At 3:11, the room went ice cold.",
+   "scene": "room",
+   "mode": "flash",
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "text": "At 3:12, the empty crib began to rock.",
+   "scene": "room",
+   "mode": "flash",
+   "zoom": true,
+   "sfx": [
+    "creak"
+   ]
+  },
+  {
+   "text": "Something tall unfolded from the corner.",
+   "scene": "room",
+   "mode": "nv",
+   "figure": "approach",
+   "shake": true
+  },
+  {
+   "text": "It bent over the crib, found it empty, and turned to me.",
+   "scene": "face",
+   "mode": "nv",
+   "shake": true
+  },
+  {
+   "text": "I hit the light switch. It was gone.",
+   "scene": "room",
+   "mode": "flash",
+   "figure": "vanish",
+   "glitch": true
+  },
+  {
+   "text": "The woman who sold us the monitor finally called back.",
+   "scene": "livingroom",
+   "mode": "nv",
+   "people": 1
+  },
+  {
+   "text": "She said it only shows you what's coming, so you have one day to move your baby.",
+   "scene": "livingroom",
+   "mode": "cctv",
+   "cam": "CAM 01 - LIVING ROOM",
+   "people": 2
+  },
+  {
+   "text": "Her family had learned that too late.",
+   "scene": "black",
+   "mode": "card",
+   "card": "SELLER'S NOTE: KEEP IT RECORDING. IT ONLY COMES WHERE THE BABY SHOULD BE."
+  },
+  {
+   "text": "Ivy is safe. She sleeps between us every night now.",
+   "scene": "room",
+   "mode": "nv",
+   "people": 2
+  },
+  {
+   "text": "But this morning, a new file loaded. It's dated tomorrow.",
+   "scene": "kitchen",
+   "mode": "cctv",
+   "cam": "CAM 02 - KITCHEN",
+   "people": 1,
+   "glitch": true
+  },
+  {
+   "text": "It shows our bedroom, and something standing at the foot of our bed.",
+   "scene": "room",
+   "mode": "cctv",
+   "cam": "NURSERY CAM",
+   "figure": "near",
+   "zoom": true,
+   "shake": true
+  }
+ ]
+}
