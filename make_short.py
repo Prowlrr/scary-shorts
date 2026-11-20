@@ -6,6 +6,7 @@ Usage: python3 make_short.py story.json out.mp4 [--models DIR] [--preview DIR]
 story.json
 {
   "title": "...",                      # YouTube title (not drawn)
+  "ambience": "wind",                  # optional: wind | crickets | rain | drone | musicbox | quiet (default follows season)
   "season": "autumn",                  # autumn | summer | rain | fog (winter exists but isn't used)
   "beats": [                           # one scene per beat, 1-2 short sentences each
     {"text": "If every phone in your town gets the same alert...",
@@ -15,7 +16,8 @@ story.json
      "mood": "scared",                 # optional: character face (neutral/scared)
      "figure": true,                   # optional: show the lurking figure (window/door/hallway/bedroom/forest/livingroom)
      "shake": true,                    # optional: camera shake + boom (knocks, bangs, twist)
-     "hook": true,                     # FIRST beat only: cold-open teaser (overlay instant, red flash, stinger)
+     "hook": "flash",                  # FIRST beat only, optional: flash | glitch | fade | text | quiet (or true = flash)
+     "transition": "cut",              # optional: cut | fade | flash | glitch (into this beat)
      "sfx": ["knock", {"name": "creak", "at": 0.5}]}  # optional extra sounds (see sfx.BANK); auto sounds are added from overlays/keywords
   ]
 }
@@ -843,6 +845,11 @@ KEYWORD_SFX = [(r"\bknock", "knock"), (r"\bcreak|door (slowly )?open|opened the 
                (r"buzz", "buzz")]
 
 
+def hook_style(b):
+    h = b.get("hook")
+    return h if h in ("flash", "glitch", "fade", "text", "quiet") else "flash"
+
+
 def sound_events(beats, timing):
     """Pick sound effects automatically from each beat (plus explicit beat['sfx'])."""
     ev = []
@@ -850,7 +857,13 @@ def sound_events(beats, timing):
         s = tm["start"]
         o = (b.get("overlay") or {}).get("type")
         if b.get("hook"):
-            ev.append(("stinger", 0.0))
+            hs = hook_style(b)
+            ev.append({"flash": ("stinger", 0.0), "glitch": ("static", 0.0), "fade": ("heartbeat", 0.0),
+                       "text": ("notify", 0.15), "quiet": ("riser", 0.0)}[hs])
+            if hs == "glitch":
+                ev.append(("boom", 0.25))
+        elif i > 0 and b.get("transition") == "glitch":
+            ev.append(("static", max(0, s - 0.15)))
         elif i > 0 and b.get("scene") != beats[i - 1].get("scene"):
             ev.append(("whoosh", max(0, s - 0.25)))
         if o == "alert":
@@ -879,12 +892,15 @@ def sound_events(beats, timing):
     return ev
 
 
+AMBIENCE = ["wind"]
+
+
 def mix_audio(beats, timing, dur, voice_wav, out_wav):
     import soundfile as sf
     SR = sfx.SR
     n = int(SR * dur) + SR
     bed = np.zeros(n, np.float32)
-    amb = sfx.ambience(dur)
+    amb = sfx.ambience(dur, AMBIENCE[0])
     bed[:len(amb)] += amb * 0.55
     for name, at in sound_events(beats, timing):
         x = SFXBANK[name]() * sfx.GAIN[name]
@@ -942,6 +958,7 @@ def ease(x):
 def render(story, out, models, preview_dir=None):
     beats = story["beats"]
     set_season(story.get("season", "autumn"))
+    AMBIENCE[0] = story.get("ambience", {"summer": "crickets", "rain": "rain", "fog": "drone"}.get(story.get("season"), "wind"))
     work = tempfile.mkdtemp(prefix="short_")
     wav, ass, amb = (os.path.join(work, n) for n in ("voice.wav", "caps.ass", "amb.wav"))
     timing, dur = narrate(beats, models, wav)
@@ -1002,7 +1019,7 @@ def render(story, out, models, preview_dir=None):
             span = art.width - cw
             x0 = span * (0.1 + 0.8 * q) if move == 2 else span * (0.9 - 0.8 * q)
             y0 = (art.height - ch) / 2
-        if (b.get("shake") or b.get("hook") or b.get("scene") == "face") and lt < 1.0:
+        if (b.get("shake") or (b.get("hook") and hook_style(b) in ("flash", "glitch")) or b.get("scene") == "face") and lt < 1.0:
             a = 16 * (1.0 - lt)
             x0 = min(max(0, x0 + a * math.sin(lt * 70)), art.width - cw)
             y0 = min(max(0, y0 + a * math.cos(lt * 53)), art.height - ch)
@@ -1013,7 +1030,7 @@ def render(story, out, models, preview_dir=None):
         if base is not None:
             img.alpha_composite(base)
         if ov is not None:
-            e = 1.0 if b.get("hook") else ease((lt - 0.1) / 0.3)
+            e = 1.0 if (b.get("hook") and hook_style(b) != "text") else ease((lt - 0.1) / 0.3)
             if e > 0:
                 s = 0.88 + 0.12 * e
                 o2 = ov if e >= 1 else ov.resize((max(1, int(ov.width * s)), max(1, int(ov.height * s))), Image.BILINEAR)
@@ -1025,7 +1042,23 @@ def render(story, out, models, preview_dir=None):
             img = Image.blend(Image.new("RGBA", img.size, (0, 0, 0, 255)), img, fl)
         if light[f] > 0:
             img.alpha_composite(Image.new("RGBA", img.size, (225, 230, 255, int(170 * light[f]))))
-        if b.get("hook") and lt < 0.9:  # red flash pulses on the cold open
+        hs = hook_style(b) if b.get("hook") else None
+        tr = b.get("transition", "cut") if i > 0 else "cut"
+        if hs == "fade" and lt < 1.6:
+            img = Image.blend(Image.new("RGBA", img.size, (0, 0, 0, 255)), img, min(1.0, lt / 1.6))
+        if tr == "fade" and lt < 0.5:
+            img = Image.blend(Image.new("RGBA", img.size, (0, 0, 0, 255)), img, lt / 0.5)
+        if tr == "flash" and lt < 0.25:
+            img.alpha_composite(Image.new("RGBA", img.size, (255, 255, 255, int(230 * (1 - lt / 0.25)))))
+        if (hs == "glitch" and lt < 1.0) or (tr == "glitch" and lt < 0.35):
+            a = np.asarray(img).copy()
+            rngg = np.random.default_rng(f)
+            for _ in range(7):
+                y0 = rngg.integers(0, H - 80); hh = rngg.integers(10, 80)
+                a[y0:y0 + hh] = np.roll(a[y0:y0 + hh], rngg.integers(-90, 90), axis=1)
+            a[..., 0] = np.roll(a[..., 0], 12, axis=1); a[..., 2] = np.roll(a[..., 2], -12, axis=1)
+            img = Image.fromarray(a)
+        if hs == "flash" and lt < 0.9:  # red flash pulses on the cold open
             a = int(150 * (1 - lt / 0.9) * (0.6 + 0.4 * math.cos(lt * 25)))
             img.alpha_composite(Image.new("RGBA", img.size, (170, 0, 0, max(0, a))))
         return img.convert("RGB")

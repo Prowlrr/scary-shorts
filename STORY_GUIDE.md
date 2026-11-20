@@ -1,36 +1,45 @@
-# Daily scary Short: story-writing guide
+# Scary Short: story-writing guide
 
-Write ONE brand-new, original scary story per day as `stories/YYYY-MM-DD.json` (format in `make_short.py`). Read `posted.md` first, and never reuse a premise, twist, setting combo, character name or title that's already listed there.
+The channel posts **4 Shorts a day** (slots 18:00, 21:00, 00:00 and 03:00 Europe/Berlin). Each video is `stories/<SLOT>.json` → `videos/<SLOT>.mp4`, where SLOT = `YYYY-MM-DD-HHMM` in Berlin time (older files are plain dates). Read `posted.md` first and never reuse a premise, twist, setting combo, character name or title already listed there.
 
-## What to write
-- **Any kind of scary story.** Vary it day to day: first-person ("I"), second-person ("you") or third-person; urban legends, home invasions, cursed objects, road trips, babysitting, camping, lake houses, cabins, cemeteries, things in the mirror, wrong numbers, voices that copy people, missing time, creepy neighbors, etc. Don't fall back on the same "emergency alert" format.
-- **A COMPLETE story, 1–2 minutes long: 24–32 beats, 220–300 words** (~85–115 s). Keep it fast: each beat is ONE short sentence (two only if very short), so the picture changes every 2–4 seconds. Use simple words that land when read aloud.
-- **Beat 1 is a cold-open HOOK** with `"hook": true`. Show the scariest moment of the story (a scene with `figure: true`) plus a creepy `alert` or `text` overlay message (e.g. a warning rule, a message from an unknown number). Narrate one gripping line (under 18 words) that teases the climax, e.g. "She knocked on my door all night, begging me to let her in. I'm glad I didn't." The renderer adds a red flash, a shake and a stinger sound.
-- Sound effects are automatic: alert tone on `alert`, buzz and ding on `text`, whooshes on scene changes, a boom on `shake`, a riser and boom on the last beat, and keyword sounds ("knock", "creak", "footsteps", "heart", "static", "buzz"). Add extras with `"sfx": ["knock", {"name": "creak", "at": 0.5}]` (bank: boom riser whoosh alert notify buzz ding knock creak heartbeat static footsteps stinger). Don't overdo it.
-- It needs a full arc after the hook: opening line → setup (who, where, the rule or strange thing) → escalation (3+ creepy events that get worse) → climax (the confrontation) → resolution (what happened after, so the mystery is answered) → final chilling line. Never end on "to be continued", "part 2" or an unexplained cliffhanger.
-- Use concrete details (times, sounds, messages, small wrong things). No moral, no "the end", no question to the audience.
+**Keep only these the same every time:** the flat-illustration art style, the narrator voice and the caption style. **Everything else should change from video to video:** story type and structure, intro style, settings, scenes, season, background sound, sound effects, overlays and pacing. Look at the last ~8 entries in posted.md (they log story type, hook style and ambience) and pick a different combination.
+
+## Story (must be COMPLETE, 1–2 minutes)
+- **22–32 beats, 200–300 words** (~80–115 s). Mostly one short sentence per beat, so the picture changes every 2–4 seconds. Use simple words that land when read aloud.
+- It needs a full arc (setup → escalation → climax → resolution that answers the mystery → final chilling line). Never end on "to be continued", "part 2" or an unexplained cliffhanger. No moral, no "the end", no question to the audience.
+- **Rotate the story TYPE**, never the same type twice in a row:
+  first-person confession · "rules" job (night guard, babysitter, motel clerk) · text-message thread / wrong number · urban legend told as fact · second-person "you" scenario · found diary or voicemail · creepy neighbor · road trip / gas station / hitchhiker · camping or lake trip · haunted house move-in · twin, doppelgänger or mimic · missing time · kid's imaginary friend · something in the mirror · sleep paralysis · small-town tradition · a "true" story from someone's grandpa
+- **Rotate the TWIST type:** the narrator was wrong about who is who · it was inside the whole time · it's still happening · the helper was the monster · the rule was a lie · a time loop · a reveal in the last text message · a quiet, sad ending · a hopeful but eerie ending.
 - Keep it PG-13: dread and suspense, no gore, no self-harm, no real people, places or brands, no copyrighted characters.
 
-## Visual variety (same art style every time, different look per story)
-- Story-level `"season"`: autumn | summer | rain | fog. Rotate it; don't use the same one two days in a row. **Never use winter/snow, and don't set stories in snowy mountain towns.**
-- Scenes (one per beat): street, town, road, lake, cabin, forest, cemetery, campsite (outdoor) · livingroom, kitchen, bedroom, hallway, basement, bathroom, door, window, phone (indoor).
-  - Pick scenes that fit the story's setting, use at least 8 different scenes per story, and never use the same scene more than 3 times in a row (phone conversations are the exception). Make the mix of settings different from the last few days in posted.md. Use `town` rarely.
-- `figure: true/false` shows or hides the lurking silhouette (most scenes show it by default; livingroom, kitchen, cabin and street hide it by default). Hide it before the reveal.
-- `mood: "scared"` changes the character's face (livingroom, kitchen, bedroom). `shake: true` for bangs, knocks and the twist.
+## Opening (vary it; never the same style twice in a row)
+- Beat 1 must hook within 2 seconds, but HOW changes:
+  - `"hook": "flash"`: cold open on the scariest moment, red flash, shake, stinger.
+  - `"hook": "glitch"`: VHS/static glitch, good for found footage, cameras, phones.
+  - `"hook": "fade"`: slow fade from black with a heartbeat, good for quiet dread.
+  - `"hook": "text"`: opens on a phone message popping in (use the `phone` scene with a `text` overlay).
+  - `"hook": "quiet"`: no effect, just a striking line with a riser underneath.
+  - …or no hook flag at all: start straight in with a punchy first line (e.g. "My neighbor has waved at me every night for 11 years. He died in 2019.").
+- Hook lines can be a statement, a rule, a confession, a message or a question.
 
-## Make it lively (people + excitement)
-- Scenes must not feel empty. Use `"people": N` to add varied background characters: street (up to 4), campsite (3, sitting by the fire), livingroom (2 on the couch), kitchen (2), lake (2 on the dock), cabin (2), cemetery (3 mourners), town (3), bedroom (1). Defaults already add some; set `"people": 0` only for lonely, scary moments.
-- Show other characters when the story mentions them (family, friends, campers, neighbors). Introduce at least 2 other characters in every story.
-- Use `"scene": "face"` (full-screen close-up of the creature's glowing eyes and wide smile, with an automatic stinger sound) ONCE at the climax for a jump scare.
-- Use `"shake": true` on 4–6 big moments, and `"flicker": true` when lights or power fail (also triggered automatically by words like "lights"). The rain season adds lightning and thunder outdoors automatically.
-- Captions pop in and scary words turn red automatically.
+## Visuals (same art style, different look)
+- `"season"`: autumn | summer | rain | fog. Never winter/snow, never a snowy mountain town. Don't repeat the previous video's season.
+- Scenes: street, town, road, lake, cabin, forest, cemetery, campsite (outdoor) · livingroom, kitchen, bedroom, hallway, basement, bathroom, door, window, phone (indoor) · face (jump-scare close-up).
+  - Use 7+ different scenes per story, fitted to the setting. Don't build every story around phone, door and window: some should barely use the phone, others should be mostly outdoors, and so on.
+- People: `"people": N` adds varied background characters (street 4, campsite 3, livingroom 2, kitchen 2, lake 2, cabin 2, cemetery 3, town 3, bedroom 1). Scenes shouldn't feel empty except in deliberately lonely moments (`"people": 0`). Show the other characters the story mentions.
+- `figure: true/false` shows the lurking silhouette; `mood: "scared"` changes the character's face.
+- Use these as the story calls for them, not all in every video:
+  - `"scene": "face"` jump scare (in about half the videos at most);
+  - `"shake": true` (2–6 times);
+  - `"flicker": true` (lights failing);
+  - `"transition"`: fade | flash | glitch on a few beats (default is a hard cut).
+- Overlays (0–6 per story, mix them differently each time): `text` {from, message}, `alert` {header, lines, red}, `clock` {time}, `sign` {name, sub}, `label` {text}. Not every story needs an alert or a phone.
 
-## Overlays (use 3–6 per story where they fit)
-- `text` {from, message}: a phone notification (great on `phone`).
-- `alert` {header?, lines[2–3 short lines], red:[indexes]}: a warning card (header can be anything: "Weather Alert", "Missing Person", "Note on the door"…).
-- `clock` {time:"3:07 AM"}: time badge. Phone scenes show the last time used (or pass `time`).
-- `sign` {name, sub}: a roadside or town sign. `label` {text}: red tag, e.g. "DO NOT ENTER".
+## Sound (vary it)
+- `"ambience"`: wind | crickets | rain | drone | musicbox | quiet. The default follows the season (summer = crickets, rain = rain, fog = drone, otherwise wind); override it for variety. Don't repeat the previous video's ambience.
+- Automatic effects: alert tone on `alert`, buzz and ding on `text`, whooshes on scene changes, a boom on `shake`, a stinger on `face`, a riser into the last beat, and keyword sounds ("knock", "creak", "footsteps", "heart", "static", "buzz").
+- Add extras with `"sfx": ["knock", {"name": "creak", "at": 0.5}]`. Bank: boom riser whoosh alert notify buzz ding knock creak heartbeat static footsteps stinger. Pick the ones that fit; don't stack them.
 
 ## YouTube metadata (put in the story JSON)
-- `title`: ≤ 70 chars, curiosity-driven, matching the hook, + ` #shorts #scarystories`
-- `description`: 1 creepy teaser line + "\n\nFollow for a new scary story every night.\n\n#scarystory #horrorstories #creepy #shorts"
+- `title`: ≤ 70 chars, curiosity-driven, + ` #shorts #scarystories`. Vary the title pattern too (not always "I took a…" / "If you…").
+- `description`: 1 creepy teaser line + "\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts"

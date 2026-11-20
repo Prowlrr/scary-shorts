@@ -159,10 +159,50 @@ def stinger(d=1.4):
     return norm(x + boom(d) * 1.2, 0.9)
 
 
-def ambience(dur):
-    """Wind + faint eerie high tone + low hum, like the reference bed."""
+def _crickets(t):
+    x = np.zeros_like(t)
+    for f0, rate, ph in ((4200, 2.1, 0.0), (4700, 1.6, 1.3), (3900, 2.7, 2.1)):
+        chirp = (np.sin(2 * np.pi * rate * t + ph) > 0.6) * (np.sin(2 * np.pi * 28 * t) > 0)
+        x += np.sin(2 * np.pi * f0 * t) * np.convolve(chirp.astype(float), np.ones(120) / 120, "same") * 0.05
+    return x
+
+
+def _musicbox(t):
+    notes = [659, 622, 659, 494, 587, 523, 440, 0, 330, 392, 440, 0, 494, 415, 494, 523]
+    x = np.zeros_like(t); step = 0.55
+    for i in range(int(t[-1] / step) + 1):
+        f = notes[i % len(notes)] * (0.5 if (i // 16) % 2 else 1)
+        if not f:
+            continue
+        o = int(i * step * SR); tt = t[: min(len(t) - o, int(SR * 1.4))]
+        if len(tt) <= 0:
+            break
+        tone = (np.sin(2 * np.pi * f * tt) + 0.3 * np.sin(2 * np.pi * f * 3 * tt)) * np.exp(-tt * 3.5) * 0.06
+        x[o:o + len(tt)] += tone * (1 + 0.004 * np.sin(2 * np.pi * 0.3 * tt))
+    return x
+
+
+def ambience(dur, kind="wind"):
+    """Background bed. kind: wind | crickets | rain | drone | musicbox | quiet"""
     t = _t(dur)
     n = len(t)
+    if kind != "wind":
+        hum = (np.sin(2 * np.pi * 55 * t) + 0.8 * np.sin(2 * np.pi * 58.2 * t)) * 0.03
+        if kind == "crickets":
+            x = _crickets(t) + _bp_fast(_rng.standard_normal(n), 100, 600) * 0.03 + hum
+        elif kind == "rain":
+            r = _bp_fast(_rng.standard_normal(n), 800, 9000)
+            x = r / (np.max(np.abs(r)) or 1) * 0.28 + _bp_fast(_rng.standard_normal(n), 60, 300) * 0.05 + hum
+        elif kind == "drone":
+            x = sum(np.sin(2 * np.pi * f * t + 3 * np.sin(2 * np.pi * 0.05 * t + f)) for f in (73.4, 110, 155.6, 220.8)) * 0.045 \
+                * (0.6 + 0.4 * np.sin(2 * np.pi * 0.04 * t))
+        elif kind == "musicbox":
+            x = _musicbox(t) + hum + _bp_fast(_rng.standard_normal(n), 200, 900) * 0.02
+        else:  # quiet: room tone only
+            x = _bp_fast(_rng.standard_normal(n), 80, 500) * 0.02 + hum
+        fade = int(SR * 1.5)
+        x[:fade] *= np.linspace(0, 1, fade); x[-fade:] *= np.linspace(1, 0, fade)
+        return x.astype(np.float32)
     wind = _bp_fast(_rng.standard_normal(n), 150, 1200)
     lfo = 0.55 + 0.45 * np.sin(2 * np.pi * 0.07 * t + 1) * np.sin(2 * np.pi * 0.023 * t)
     wind = wind / (np.max(np.abs(wind)) or 1) * lfo * 0.35
