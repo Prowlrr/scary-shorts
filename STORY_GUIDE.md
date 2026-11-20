@@ -1,45 +1,32 @@
-# Scary Short: story-writing guide
+# Scary Short: story-writing guide (FOUND-FOOTAGE style)
 
-The channel posts **4 Shorts a day** (slots 18:00, 21:00, 00:00 and 03:00 Europe/Berlin). Each video is `stories/<SLOT>.json` → `videos/<SLOT>.mp4`, where SLOT = `YYYY-MM-DD-HHMM` in Berlin time (older files are plain dates). Read `posted.md` first and never reuse a premise, twist, setting combo, character name or title already listed there.
+The channel posts **2 Shorts a day**, at **18:00 and 00:00 Europe/Berlin** (12 PM and 6 PM US Eastern). Each video is `stories/<SLOT>.json` → `videos/<SLOT>.mp4`, where SLOT = `YYYY-MM-DD-HHMM` in Berlin time. Read `posted.md` first and never reuse a premise, twist, setting, character name or title already listed there.
 
-**Keep only these the same every time:** the flat-illustration art style, the narrator voice and the caption style. **Everything else should change from video to video:** story type and structure, intro style, settings, scenes, season, background sound, sound effects, overlays and pacing. Look at the last ~8 entries in posted.md (they log story type, hook style and ambience) and pick a different combination.
+**The look is FOUND FOOTAGE** (renderer: `footage.py`; the story JSON must have `"style": "footage"`). Every video looks like recovered camera footage: night-vision camcorder, security cameras, flashlight phone video and dashcam, with handheld shake, tape glitches, REC/timecode overlays and yellow subtitle captions. The narrator voice stays the same. Don't use the old cartoon style (`make_short.py` scenes, alert cards, phone mockups).
 
 ## Story (must be COMPLETE, 1–2 minutes)
-- **22–32 beats, 200–300 words** (~80–115 s). Mostly one short sentence per beat, so the picture changes every 2–4 seconds. Use simple words that land when read aloud.
-- It needs a full arc (setup → escalation → climax → resolution that answers the mystery → final chilling line). Never end on "to be continued", "part 2" or an unexplained cliffhanger. No moral, no "the end", no question to the audience.
-- **Rotate the story TYPE**, never the same type twice in a row:
-  first-person confession · "rules" job (night guard, babysitter, motel clerk) · text-message thread / wrong number · urban legend told as fact · second-person "you" scenario · found diary or voicemail · creepy neighbor · road trip / gas station / hitchhiker · camping or lake trip · haunted house move-in · twin, doppelgänger or mimic · missing time · kid's imaginary friend · something in the mirror · sleep paralysis · small-town tradition · a "true" story from someone's grandpa
-- **Rotate the TWIST type:** the narrator was wrong about who is who · it was inside the whole time · it's still happening · the helper was the monster · the rule was a lie · a time loop · a reveal in the last text message · a quiet, sad ending · a hopeful but eerie ending.
+- **20–30 beats, 190–290 words** (~70–115 s). Mostly one short sentence per beat (the camera cuts every 2–4 s). Use simple words that sound good read aloud.
+- Full arc: hook → setup (who is filming, where, why) → escalation (3+ incidents caught on camera, getting worse) → climax → resolution that explains what happened → final chilling line. No cliffhangers, no "part 2", no morals, no questions to the audience.
+- It's told by the person who filmed it, or as a recovered tape. Give a reason the camera is rolling: a baby monitor, home security, a ghost-hunting trip, a dashcam, a night-shift job, a vlog, a trail camera, a camcorder found in an attic, filming a sibling's sleepwalking, and so on.
+- **Rotate the story TYPE** (check posted.md): security-camera mystery · ghost-hunting friends · night-shift job (guard, motel, gas station) · sleepwalking/self-recording · baby monitor · road trip dashcam · camping trail cam · abandoned building exploration · haunted move-in · mimic or doppelgänger · missing-person tape · neighbor surveillance.
+- **Rotate the TWIST type:** the filmer is the one being watched · it's been in the house the whole time · the footage timestamps are wrong · a friend wasn't who they seemed · it follows the camera · the tape itself is the danger · a quiet, sad reveal.
 - Keep it PG-13: dread and suspense, no gore, no self-harm, no real people, places or brands, no copyrighted characters.
 
-## Opening (vary it; never the same style twice in a row)
-- Beat 1 must hook within 2 seconds, but HOW changes:
-  - `"hook": "flash"`: cold open on the scariest moment, red flash, shake, stinger.
-  - `"hook": "glitch"`: VHS/static glitch, good for found footage, cameras, phones.
-  - `"hook": "fade"`: slow fade from black with a heartbeat, good for quiet dread.
-  - `"hook": "text"`: opens on a phone message popping in (use the `phone` scene with a `text` overlay).
-  - `"hook": "quiet"`: no effect, just a striking line with a riser underneath.
-  - …or no hook flag at all: start straight in with a punchy first line (e.g. "My neighbor has waved at me every night for 11 years. He died in 2019.").
-- Hook lines can be a statement, a rule, a confession, a message or a question.
+## Beats: camera modes and scenes
+- `"mode"`: `nv` (green night-vision camcorder, default) · `cctv` (grey security cam, choppy frame rate; set `"cam": "CAM 02 - KITCHEN"`) · `flash` (dark, warm flashlight beam) · `dash` (dashcam) · `card` (black screen with typed white text: use it for the opening "recovered tape" note or a found note; put the shown text in `"card"`).
+- Mix at least 3 modes per video and vary the mix between videos (e.g. one mostly cctv, another mostly flashlight).
+- `"scene"`: hallway, room (bedroom), stairs (basement), door, window, forest, livingroom, kitchen, attic, road, tent, yard, face (extreme close-up of the creature: use once at most, as a jump scare), black.
+- Figure: `"figure": "far" | "near" | "approach" | "vanish"` (approach = walks toward the camera; vanish = glitches away). Leave it out in calm shots, and build up to it.
+- People: `"people": 1-3` shows family or friends in frame (livingroom, kitchen, hallway, forest, tent, room, yard, attic). Use people in the setup and calm parts so it doesn't feel empty.
+- Camera: `"walk": true` (walking bob), `"zoom": true` (pushes in on the figure or a detail), `"shake": true` (panic + boom), `"glitch": true` (tape glitch into the shot). Small random glitches happen automatically.
+- `"hook"` on beat 1: `card` (typed "TAPE FOUND…" note), `glitch` (static burst into footage) or `cold` (open straight on the scariest shot). Vary it between videos.
+- `"sfx": [...]`: extra sounds (boom riser whoosh alert notify buzz ding knock creak heartbeat static footsteps stinger). Keyword sounds ("knock", "creak", "footsteps", "heart", "static") are automatic.
 
-## Visuals (same art style, different look)
-- `"season"`: autumn | summer | rain | fog. Never winter/snow, never a snowy mountain town. Don't repeat the previous video's season.
-- Scenes: street, town, road, lake, cabin, forest, cemetery, campsite (outdoor) · livingroom, kitchen, bedroom, hallway, basement, bathroom, door, window, phone (indoor) · face (jump-scare close-up).
-  - Use 7+ different scenes per story, fitted to the setting. Don't build every story around phone, door and window: some should barely use the phone, others should be mostly outdoors, and so on.
-- People: `"people": N` adds varied background characters (street 4, campsite 3, livingroom 2, kitchen 2, lake 2, cabin 2, cemetery 3, town 3, bedroom 1). Scenes shouldn't feel empty except in deliberately lonely moments (`"people": 0`). Show the other characters the story mentions.
-- `figure: true/false` shows the lurking silhouette; `mood: "scared"` changes the character's face.
-- Use these as the story calls for them, not all in every video:
-  - `"scene": "face"` jump scare (in about half the videos at most);
-  - `"shake": true` (2–6 times);
-  - `"flicker": true` (lights failing);
-  - `"transition"`: fade | flash | glitch on a few beats (default is a hard cut).
-- Overlays (0–6 per story, mix them differently each time): `text` {from, message}, `alert` {header, lines, red}, `clock` {time}, `sign` {name, sub}, `label` {text}. Not every story needs an alert or a phone.
+## Story-level keys
+- `"style": "footage"` (required)
+- `"tape": {"start": "03:14:22", "date": "OCT 14 2026"}`: on-screen timecode start and date (vary them; dates can be in the past)
+- `"ambience"`: tape (camcorder hiss, default) · wind · rain · drone · crickets · quiet. Vary it.
 
-## Sound (vary it)
-- `"ambience"`: wind | crickets | rain | drone | musicbox | quiet. The default follows the season (summer = crickets, rain = rain, fog = drone, otherwise wind); override it for variety. Don't repeat the previous video's ambience.
-- Automatic effects: alert tone on `alert`, buzz and ding on `text`, whooshes on scene changes, a boom on `shake`, a stinger on `face`, a riser into the last beat, and keyword sounds ("knock", "creak", "footsteps", "heart", "static", "buzz").
-- Add extras with `"sfx": ["knock", {"name": "creak", "at": 0.5}]`. Bank: boom riser whoosh alert notify buzz ding knock creak heartbeat static footsteps stinger. Pick the ones that fit; don't stack them.
-
-## YouTube metadata (put in the story JSON)
-- `title`: ≤ 70 chars, curiosity-driven, + ` #shorts #scarystories`. Vary the title pattern too (not always "I took a…" / "If you…").
-- `description`: 1 creepy teaser line + "\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts"
+## YouTube metadata (in the story JSON)
+- `title`: ≤ 70 chars, curiosity-driven, + ` #shorts #scarystories`. Vary the patterns ("My Security Camera Caught…", "This Tape Was Found…", "Why I Stopped Filming My…").
+- `description`: 1 creepy teaser line + "\n\nFollow for new scary stories every day.\n\n#scarystory #foundfootage #creepy #shorts"

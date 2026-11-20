@@ -1103,5 +1103,9 @@ if __name__ == "__main__":
     if "--preview" in a:
         i = a.index("--preview"); prev = a[i + 1]; del a[i:i + 2]
     story = json.load(open(a[0]))
-    res, dur = render(story, a[1] if len(a) > 1 else "out.mp4", models, prev)
+    if story.get("style") == "footage":
+        import footage
+        res, dur = footage.render(story, a[1] if len(a) > 1 else "out.mp4", models, prev)
+    else:
+        res, dur = render(story, a[1] if len(a) > 1 else "out.mp4", models, prev)
     print(f"duration {dur:.1f}s")

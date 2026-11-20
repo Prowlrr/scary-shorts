@@ -198,6 +198,10 @@ def ambience(dur, kind="wind"):
                 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.04 * t))
         elif kind == "musicbox":
             x = _musicbox(t) + hum + _bp_fast(_rng.standard_normal(n), 200, 900) * 0.02
+        elif kind == "tape":  # camcorder hiss + mains hum + faint wind
+            hiss = _bp_fast(_rng.standard_normal(n), 2000, 12000)
+            x = hiss / (np.max(np.abs(hiss)) or 1) * 0.05 + (np.sin(2 * np.pi * 60 * t) * 0.025 + np.sin(2 * np.pi * 120 * t) * 0.012) \
+                + _bp_fast(_rng.standard_normal(n), 120, 700) * 0.04 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.06 * t))
         else:  # quiet: room tone only
             x = _bp_fast(_rng.standard_normal(n), 80, 500) * 0.02 + hum
         fade = int(SR * 1.5)
