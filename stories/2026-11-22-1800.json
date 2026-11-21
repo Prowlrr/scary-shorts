@@ -1,0 +1,174 @@
+{
+ "title": "The Gas Station Clerk Begged Me Not to Look Outside #shorts #scarystories",
+ "description": "He locked the door to keep me safe. That's what he said.\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts",
+ "tags": [
+  "scary stories",
+  "gas station horror",
+  "creepy",
+  "horror shorts",
+  "short horror story",
+  "shorts"
+ ],
+ "season": "autumn",
+ "ambience": "drone",
+ "voice": "narrator_f",
+ "speed": 1.0,
+ "beats": [
+  {
+   "text": "The gas station clerk whispered, don't look at the man at pump four.",
+   "scene": "town",
+   "figure": true,
+   "people": 0,
+   "overlay": {
+    "type": "sign",
+    "name": "OPEN 24 HOURS",
+    "sub": "Last gas for 40 miles"
+   }
+  },
+  {
+   "text": "2 AM. Empty highway.",
+   "scene": "road",
+   "figure": false,
+   "overlay": {
+    "type": "clock",
+    "time": "2:04 AM"
+   }
+  },
+  {
+   "text": "I'd only stopped for coffee.",
+   "scene": "kitchen",
+   "people": 1
+  },
+  {
+   "text": "He said, that man isn't buying gas. He's waiting.",
+   "scene": "window",
+   "figure": true
+  },
+  {
+   "text": "Then he locked the door.",
+   "scene": "door",
+   "figure": false,
+   "overlay": {
+    "type": "label",
+    "text": "CLOSED"
+   }
+  },
+  {
+   "text": "Outside, a man in a trucker cap started banging on the glass.",
+   "scene": "window",
+   "figure": true,
+   "shake": true,
+   "sfx": [
+    "knock"
+   ]
+  },
+  {
+   "text": "Shouting the same words, over and over.",
+   "scene": "window",
+   "figure": true,
+   "mood": "scared"
+  },
+  {
+   "text": "The clerk said, don't listen. That's how he gets you.",
+   "scene": "kitchen",
+   "people": 1
+  },
+  {
+   "text": "No signal.",
+   "scene": "phone",
+   "overlay": {
+    "type": "alert",
+    "header": "Call failed",
+    "lines": [
+     "No service",
+     "Emergency calls only"
+    ],
+    "red": [
+     0
+    ]
+   }
+  },
+  {
+   "text": "Then I read the clerk's name tag. Linda.",
+   "scene": "kitchen",
+   "mood": "scared",
+   "people": 1,
+   "overlay": {
+    "type": "label",
+    "text": "HI, I'M LINDA"
+   }
+  },
+  {
+   "text": "Behind the counter, the freezer door hung open.",
+   "scene": "basement",
+   "figure": false,
+   "flicker": true,
+   "transition": "fade"
+  },
+  {
+   "text": "The trucker pressed a note to the glass.",
+   "scene": "window",
+   "figure": true,
+   "overlay": {
+    "type": "alert",
+    "header": "Written on a receipt",
+    "lines": [
+     "HE'S NOT THE CLERK.",
+     "SHE'S IN THE FREEZER."
+    ],
+    "red": [
+     0,
+     1
+    ]
+   }
+  },
+  {
+   "text": "I turned around. The clerk was smiling. Too wide.",
+   "scene": "face"
+  },
+  {
+   "text": "He said, I told you not to look.",
+   "scene": "hallway",
+   "figure": true,
+   "mood": "scared",
+   "shake": true
+  },
+  {
+   "text": "Glass exploded. The trucker broke in, and I ran.",
+   "scene": "street",
+   "shake": true,
+   "transition": "flash",
+   "people": 0
+  },
+  {
+   "text": "Police found the real clerk in the freezer. Alive.",
+   "scene": "town",
+   "people": 3,
+   "overlay": {
+    "type": "clock",
+    "time": "5:40 AM"
+   }
+  },
+  {
+   "text": "The man in her uniform was gone. So was my car.",
+   "scene": "road",
+   "figure": false
+  },
+  {
+   "text": "Last night, my phone buzzed.",
+   "scene": "bedroom",
+   "mood": "scared",
+   "people": 0
+  },
+  {
+   "text": "Thanks for the coffee. See you at pump four.",
+   "scene": "phone",
+   "overlay": {
+    "type": "text",
+    "from": "Unknown",
+    "message": "Thanks for the coffee. See you at pump four.",
+    "time": "2:04"
+   }
+  }
+ ]
+}

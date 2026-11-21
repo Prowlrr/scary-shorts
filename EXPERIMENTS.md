@@ -32,6 +32,12 @@ Always keep at least one experimental (unproven) format in ROTATION so we keep l
 ## RESULTS (views / avg view duration, filled by the runs)
 | Slot | Format | Title | Views | Avg dur | Likes |
 |---|---|---|---|---|---|
+| 2026-11-19 | cartoon | Lake campground rules | n/a* | n/a | n/a |
+| 2026-11-20 | cartoon | Man in the basement counting | n/a* | n/a | n/a |
+| 2026-11-20-1800 | footage | Trail camera | n/a* | n/a | n/a |
+| 2026-11-21-0000 | footage | Baby monitor | n/a* | n/a | n/a |
+
+*2026-11-21 21:10 check: Metricool YTVP metrics returned the 4 videos but null views/duration/likes (sync lag). No new-format video is older than 48 h yet; ROTATION unchanged.
 
 ## Backlog of ideas to try
 - "Would you rather" with a creepy twist, split-screen choices
