@@ -22,7 +22,7 @@ ROTATION: chat, cartoon, quiz, kinetic, cartoon
 | cartoon | (none) | guides/cartoon.md | scary story, flat illustration (proven: 224–764 views) | 40–60 s |
 | chat | chat | guides/chat.md | text-message thread story (scary, funny or drama) | 30–55 s |
 | quiz | quiz | guides/quiz.md | riddles / brain teasers with countdown, not scary | 25–45 s |
-| kinetic | kinetic | guides/kinetic.md | bold animated words: two-sentence horror, rules lists, micro-stories | 30–50 s |
+| kinetic | kinetic | guides/kinetic.md | bold animated words: two-sentence horror, rules lists, micro-stories | 30–55 s |
 
 ## Evaluating
 Each run, call Metricool getAnalyticsDataByMetrics (brandId 8217087, metrics YTVP17 title, YTVP02 published, YTVP06 views, YTVP08 avg view duration, YTVP09 likes, YTVP11 comments, YTVP12 shares) for the last 10 days and update the RESULTS table below (YouTube stats lag ~48 h; only judge videos older than 48 h). After a format has 3+ judged videos:

@@ -3,7 +3,7 @@
 Big words appear in sync with the voice on a textured background; the punch line lands in the accent colour with a hit. No pictures: the words are the show. Renderer: `formats.py` (`"style": "kinetic"`). Full example: `guides/examples/kinetic.json`.
 
 ## Writing
-- **30–50 s.** An intro hook line, then 4–6 cards of 1–3 lines each. The last line of each card is the punch line (`"punch"` = index of the punch line; default the last).
+- **30–55 s.** An intro hook line, then 4–6 cards of 1–3 lines each. The last line of each card is the punch line (`"punch"` = index of the punch line; default the last).
 - Rotate the SERIES type (check posted.md):
   - two-sentence horror (5 cards, all original; never retell famous ones),
   - "rules" lists ("If you hear knocking at 3 AM, follow these rules": 5 rules, last one twists),

@@ -706,28 +706,27 @@ def render_kinetic(story, out, models, preview=None):
             prog = (t - t0) / max(0.1, (t1 - t0))
             lens = np.cumsum([len(w) + 1 for w in words]); shown = int(np.searchsorted(lens, prog * lens[-1], side="right")) + (1 if prog > 0 else 0)
             shown = min(nw, shown) if t >= t0 else 0
+            if s is shots[0] and s.get("intro"):
+                shown = nw  # first frame is the thumbnail in the feed: show the whole hook at once
             lh = fnt.size * 1.15
             wi = 0
             for li, l in enumerate(ls):
                 lw = l.split(); x = W / 2 - tw(l, fnt) / 2
                 for w in lw:
                     if wi < shown:
-                        wt = t0 + (t1 - t0) * ((lens[wi - 1] if wi else 0) / lens[-1])
+                        wt = -1.0 if (s is shots[0] and s.get("intro")) else t0 + (t1 - t0) * ((lens[wi - 1] if wi else 0) / lens[-1])
                         age = t - wt
                         col = acc if punch else txc
-                        sc = 1 + 0.12 * max(0, 1 - age / 0.12)
-                        if sc > 1.01:
-                            ff = font("anton", int(fnt.size * sc))
-                            d.text((x + tw(w, fnt) / 2, y + li * lh + lh / 2), w, font=ff, fill=col, anchor="mm")
-                        else:
-                            d.text((x, y + li * lh + lh / 2), w, font=fnt, fill=col, anchor="lm")
+                        k = ease(age / 0.15)
+                        cc = col if k >= 1 else (int(bgc2[0] + (col[0] - bgc2[0]) * k), int(bgc2[1] + (col[1] - bgc2[1]) * k), int(bgc2[2] + (col[2] - bgc2[2]) * k), 255)
+                        d.text((x, y + li * lh + lh / 2 + 18 * (1 - k)), w, font=fnt, fill=cc, anchor="lm")
                     x += tw(w + " ", fnt); wi += 1
             y += len(ls) * lh + 50
         # punch flash + shake
         for (fnt, ls, t0, t1, punch, text) in s["blocks"]:
             if punch and t0 <= t < t0 + 0.18 and scary:
                 img.alpha_composite(Image.new("RGBA", (W, H), (acc[0], acc[1], acc[2], int(90 * (1 - (t - t0) / 0.18)))))
-        if lt < 0.2:  # quick fade from black between cards
+        if lt < 0.2 and s is not shots[0]:  # quick fade from black between cards
             img = Image.blend(Image.new("RGBA", (W, H), (0, 0, 0, 255)), img, lt / 0.2)
         # progress bar
         if not s.get("intro") and s["label"]:
