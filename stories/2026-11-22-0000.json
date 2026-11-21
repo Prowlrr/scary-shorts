@@ -1,0 +1,96 @@
+{
+ "style": "chat",
+ "title": "My Mom Texted Me While She Was Sitting Next to Me #shorts #textstory",
+ "description": "She was on the couch with me. So who was texting from the hospital?\n\nFollow for new stories every day.\n\n#scarystory #textstory #creepy #shorts",
+ "tags": [
+  "text story",
+  "scary texts",
+  "scary stories",
+  "creepy",
+  "horror shorts",
+  "shorts"
+ ],
+ "contact": "Mom",
+ "avatar_color": "#c2185b",
+ "theme": "dark",
+ "ambience": "drone",
+ "music": "tense",
+ "hook": "My mom texted me while she was sitting right next to me",
+ "messages": [
+  {
+   "from": "them",
+   "text": "Are you home yet?"
+  },
+  {
+   "from": "me",
+   "text": "Yeah lol, I'm on the couch with you"
+  },
+  {
+   "from": "them",
+   "text": "What? I'm still at work, sweetie."
+  },
+  {
+   "from": "me",
+   "text": "Mom stop. You literally just made me tea."
+  },
+  {
+   "from": "them",
+   "text": "I've been at the hospital since 6. Double shift."
+  },
+  {
+   "from": "me",
+   "text": "Ok that's not funny"
+  },
+  {
+   "from": "them",
+   "text": "Who is sitting with you?"
+  },
+  {
+   "from": "me",
+   "text": "You. She's smiling at me right now."
+  },
+  {
+   "from": "them",
+   "text": "Don't look at her. Walk to your room and lock the door."
+  },
+  {
+   "from": "me",
+   "text": "She just asked who I'm texting."
+  },
+  {
+   "from": "them",
+   "text": "Say it's Emma."
+  },
+  {
+   "from": "me",
+   "text": "She said I don't have a friend named Emma."
+  },
+  {
+   "from": "me",
+   "text": "I'm in my room. Door's locked.",
+   "pause": 0.6
+  },
+  {
+   "from": "them",
+   "text": "Good. I'm 5 minutes away. Don't open it for anyone."
+  },
+  {
+   "from": "system",
+   "text": "Knocking at the bedroom door",
+   "sfx": [
+    "knock"
+   ]
+  },
+  {
+   "from": "me",
+   "text": "Mom? Are you home already?"
+  },
+  {
+   "from": "them",
+   "text": "No. I'm still in the car.",
+   "pause": 0.5
+  }
+ ],
+ "end": "Then she knocked again. \"Sweetie, open up. It's Mom.\"",
+ "end_say": "Then she knocked again. Sweetie, open up. It's Mom."
+}
