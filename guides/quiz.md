@@ -14,7 +14,7 @@ Bright, upbeat, interactive. Each question slides in, a countdown ring ticks, th
 ```
 {"style": "quiz", "title": "... #shorts #riddles", "description": "...", "tags": [...],
  "theme": "purple | teal | orange | night | blue", "label": "RIDDLE | QUESTION | PUZZLE",
- "voice": "af_heart", "music": "upbeat",
+ "voice": "narrator_f", "music": "upbeat",
  "intro": "...",
  "questions": [{"q": "What has hands but can't clap?", "a": "A clock", "seconds": 3,
                 "options": ["A clock", "A tree", "A glove", "A robot"], "why": "optional short explanation"}],

@@ -15,7 +15,7 @@ A Short that looks like a phone chat thread. Bubbles pop in one by one with a ty
 {"style": "chat", "title": "... #shorts #textstory", "description": "...", "tags": [...],
  "contact": "Mom", "avatar_color": "#c2185b", "theme": "dark | light | green",
  "ambience": "drone | quiet | rain | wind | none", "music": "tense | upbeat | (leave out)",
- "voices": {"me": "am_michael", "them": "af_heart", "narrator": "am_echo"},   (optional; any Kokoro voice)
+ "voices": {"me": "male", "them": "female", "narrator": "narrator"},   (optional; presets from voice.py)
  "hook": "big banner text read at the start",
  "messages": [
    {"from": "them", "text": "Are you home yet?"},
@@ -27,7 +27,7 @@ A Short that looks like a phone chat thread. Bubbles pop in one by one with a ty
 ```
 - `from`: me (right, blue) · them (left, grey) · system (small centered grey line: times, "Message deleted", events).
 - Optional per message: `"say"` (what the voice reads, if different), `"pause"`, `"typing": false`, `"typing_time"`, `"sfx"` (knock creak footsteps heartbeat static boom stinger notify ding ...).
-- Pick voices that fit the characters: female voices af_heart af_bella af_nicole af_sarah bf_emma; male am_michael am_adam am_echo am_liam bm_george. Funny chats: `"theme": "light"`, `"music": "upbeat"`, `"ambience": "none"`, `"scary": false`.
+- Pick voices that fit the characters from the voice.py presets: female, female2, british_f, narrator_f (women); male, male2, british_m, narrator (men). Use two different presets for the two people. Funny chats: `"theme": "light"`, `"music": "upbeat"`, `"ambience": "none"`, `"scary": false`.
 
 ## Title / description
 - Title ≤ 70 chars + ` #shorts #textstory` (+ `#scarystories` if scary). Patterns: "My Mom Texted Me While…", "Wrong Number Texted Me At 3AM…", "My Landlord Sent the Weirdest Text…".

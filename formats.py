@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Experimental Short formats: chat (text-message story), quiz (riddles with countdown),
-kinetic (bold animated typography: two-sentence horror, rules, micro-stories).
+"""Experimental Short formats: chat (text-message story) and quiz (riddles with countdown).
 
-Called from make_short.py when story["style"] is chat | quiz | kinetic.
+Called from make_short.py when story["style"] is chat | quiz. Voices come from voice.py.
 Each renderer builds a list of voice segments, renders frames with Pillow and encodes with ffmpeg.
 """
 import math, os, re, subprocess, sys, tempfile
@@ -94,27 +93,11 @@ def paste_scaled(img, layer, cx, cy, s, alpha=1.0):
 
 
 # ------------------------------------------------------------------ audio
-_kok = []
-
-
-def kokoro(models):
-    if not _kok:
-        from kokoro_onnx import Kokoro
-        _kok.append(Kokoro(os.path.join(models, "kokoro-v1.0.int8.onnx"), os.path.join(models, "voices-v1.0.bin")))
-    return _kok[0]
+import voice as V
 
 
 def speak(models, text, voice, speed):
-    k = kokoro(models)
-    parts = []
-    for s in [x for x in re.split(r"(?<=[.!?…])[\"”']?\s+", text.strip()) if x]:
-        a, sr = k.create(s, voice=voice, speed=speed, lang="en-us")
-        a = np.asarray(a, np.float32)
-        nz = np.where(np.abs(a) > 0.01)[0]
-        if len(nz):
-            a = a[max(0, nz[0] - 400): nz[-1] + 800]
-        parts += [a, np.zeros(int(SR_V * 0.12), np.float32)]
-    return np.concatenate(parts[:-1]) if parts else np.zeros(1, np.float32)
+    return V.speak(models, text, voice, speed)
 
 
 class Track:
@@ -228,7 +211,8 @@ MUSIC = {"upbeat": music_upbeat, "tense": music_tense}
 
 
 # ------------------------------------------------------------------ encode
-def encode(frame, n, vw, aw, out, voice_fx=""):
+def encode(frame, n, vw, aw, out, voice_fx=None):
+    voice_fx = V.VOICE_FX if voice_fx is None else voice_fx
     tmp = out[:-4] + ".part.mp4"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
            "-i", "-", "-i", vw, "-i", aw, "-filter_complex",
@@ -245,7 +229,7 @@ def encode(frame, n, vw, aw, out, voice_fx=""):
     os.replace(tmp, out)
 
 
-def run(frame, n, vw, aw, out, preview, times, voice_fx=""):
+def run(frame, n, vw, aw, out, preview, times, voice_fx=None):
     if preview:
         os.makedirs(preview, exist_ok=True)
         ps = []
@@ -321,15 +305,15 @@ def typing_bubble(th, ph):
 
 def render_chat(story, out, models, preview=None):
     th = CHAT_THEMES.get(story.get("theme", "dark"), CHAT_THEMES["dark"])
-    voices = {"me": "am_michael", "them": "af_heart"}; voices.update(story.get("voices", {}))
-    speed = story.get("speed", 1.08)
+    voices = {"me": "male", "them": "female", "narrator": "narrator"}; voices.update(story.get("voices", {}))
+    speed = story.get("speed", 1.0)
     contact = story.get("contact", "Unknown")
     tr = Track(models, lead=0.3)
     items = []  # dict(kind, img, me, t_in, typing_from)
     hook = story.get("hook")
     if hook:
         tr.fx("pop", 0.05)
-        a, b = tr.say(story.get("hook_say", hook), voices.get("narrator", "am_echo"), speed)
+        a, b = tr.say(story.get("hook_say", hook), voices.get("narrator", "narrator"), speed)
         tr.gap(0.25)
     hook_end = tr.t
     for m in story["messages"]:
@@ -338,7 +322,7 @@ def render_chat(story, out, models, preview=None):
             items.append(dict(img=chat_system(m["text"], th), me=None, t_in=tr.t, sys=True))
             tr.fx("pop", tr.t, 0.5)
             if m.get("say"):
-                tr.say(m["say"], voices.get("narrator", "am_echo"), speed)
+                tr.say(m["say"], voices.get("narrator", "narrator"), speed)
             tr.gap(m.get("pause", 0.5))
             continue
         me = kind == "me"
@@ -358,7 +342,7 @@ def render_chat(story, out, models, preview=None):
     end_t = None
     if end:
         tr.gap(0.3); end_t = tr.t; tr.fx("boom" if story.get("scary", True) else "correct", end_t)
-        tr.say(story.get("end_say", end), voices.get("narrator", "am_echo"), speed)
+        tr.say(story.get("end_say", end), voices.get("narrator", "narrator"), speed)
     work = tempfile.mkdtemp(prefix="chat_")
     vw, aw, dur = tr.write(work, bed=story.get("ambience", "quiet"), music=story.get("music"))
     n = int(dur * FPS)
@@ -454,7 +438,7 @@ QUIZ_THEMES = {
 
 def render_quiz(story, out, models, preview=None):
     c1, c2, acc = QUIZ_THEMES.get(story.get("theme", "purple"), QUIZ_THEMES["purple"])
-    voice = story.get("voice", "af_heart"); speed = story.get("speed", 1.1)
+    voice = story.get("voice", "narrator_f"); speed = story.get("speed", 1.03)
     qs = story["questions"]
     tr = Track(models, lead=0.2)
     segs = []
@@ -609,137 +593,7 @@ def render_quiz(story, out, models, preview=None):
     return run(frame, n, vw, aw, out, preview, times), dur
 
 
-# ================================================================== KINETIC
-KIN_PALETTES = {  # bg top, bg bottom, text, accent
-    "ink": ("#0b0b0d", "#1a1a20", "#f3efe6", "#e23b3b"),
-    "bone": ("#ece4d4", "#d9cdb6", "#17120d", "#a3121b"),
-    "night": ("#070b1a", "#16213e", "#e8ecff", "#ffb703"),
-    "blood": ("#1a0002", "#3d0008", "#ffe9e9", "#ff3b3b"),
-    "mint": ("#0d3b36", "#1d6b5f", "#f2fff9", "#ffd166"),
-    "sunset": ("#ff7e5f", "#feb47b", "#1b1b2f", "#ffffff"),
-}
-
-
-def render_kinetic(story, out, models, preview=None):
-    p = KIN_PALETTES.get(story.get("palette", "ink"), KIN_PALETTES["ink"])
-    bgc1, bgc2, txc, acc = hexc(p[0]), hexc(p[1]), hexc(p[2]), hexc(p[3])
-    voice = story.get("voice", "am_echo"); speed = story.get("speed", 1.05)
-    tr = Track(models, lead=0.3)
-    scary = story.get("scary", True)
-    shots = []  # dict(label, lines:[(text, t0, t1, punch)], t0, t1)
-    intro = story.get("intro")
-    if intro:
-        tr.fx("stinger" if scary else "pop", 0.05, 0.6)
-        a, b = tr.say(intro, voice, speed); tr.gap(0.35)
-        shots.append(dict(label=None, lines=[(intro, a, b, False)], t0=0, t1=tr.t, intro=True))
-    for ci, c in enumerate(story["cards"]):
-        t0 = tr.t; tr.fx("swoosh", max(0, t0 - 0.05))
-        lines = []
-        if c.get("label"):
-            tr.gap(0.45)
-        for li, line in enumerate(c["lines"]):
-            punch = li == c.get("punch", len(c["lines"]) - 1) and len(c["lines"]) > 1
-            if punch:
-                tr.gap(0.45)
-                tr.fx("boom" if scary else "correct", tr.t, 0.7)
-            a, b = tr.say(line, voice, speed)
-            lines.append((line, a, b, punch))
-            tr.gap(0.25)
-        tr.gap(c.get("hold", 0.9))
-        shots.append(dict(label=c.get("label"), lines=lines, t0=t0, t1=tr.t))
-    outro = story.get("outro")
-    if outro:
-        t0 = tr.t; a, b = tr.say(outro, voice, speed)
-        shots.append(dict(label=None, lines=[(outro, a, b, False)], t0=t0, t1=tr.t + 0.8, intro=True))
-    work = tempfile.mkdtemp(prefix="kin_")
-    vw, aw, dur = tr.write(work, bed=story.get("ambience", "drone" if scary else "none"),
-                           music=story.get("music", None if scary else "upbeat"))
-    n = int(dur * FPS)
-    bg = vgrad(bgc1, bgc2)
-    # paper grain + vignette
-    rng = np.random.default_rng(1)
-    g = (rng.standard_normal((H // 2, W // 2)) * 10).astype(np.int16)
-    g = np.kron(g, np.ones((2, 2), np.int16))
-    a = np.asarray(bg).astype(np.int16); a[..., :3] = np.clip(a[..., :3] + g[..., None], 0, 255)
-    yy, xx = np.mgrid[0:H, 0:W]; v = ((xx - W / 2) / (W * 0.75)) ** 2 + ((yy - H / 2) / (H * 0.7)) ** 2
-    a[..., :3] = (a[..., :3] * np.clip(1.15 - 0.55 * v, 0.35, 1)[..., None]).astype(np.int16)
-    bg = Image.fromarray(a.astype(np.uint8), "RGBA")
-    # layout per shot: every line wrapped, all lines stacked centered
-    for s in shots:
-        maxw = 900
-        size = 96 if s.get("intro") else 88
-        words_total = sum(len(l[0].split()) for l in s["lines"])
-        if words_total > 30:
-            size = 72
-        if words_total > 45:
-            size = 62
-        blocks = []
-        for (text, t0, t1, punch) in s["lines"]:
-            f = font("anton", int(size * (1.12 if punch else 1.0)))
-            ls = wrap(text.upper(), f, maxw)
-            blocks.append((f, ls, t0, t1, punch, text))
-        total_h = sum(len(b[1]) * b[0].size * 1.15 + 50 for b in blocks)
-        s["blocks"], s["total_h"] = blocks, total_h
-
-    def frame(f):
-        t = f / FPS
-        img = bg.copy()
-        d = ImageDraw.Draw(img)
-        s = next((x for x in shots if x["t0"] <= t < x["t1"]), shots[-1])
-        lt = t - s["t0"]
-        # card wipe-in
-        if lt < 0.25:
-            pass
-        zoom_k = 1 + 0.03 * (lt / max(1, s["t1"] - s["t0"]))
-        y = H / 2 - s["total_h"] / 2 + (60 if s["label"] else 0)
-        if s["label"]:
-            lf = font("anton", 150)
-            ka = back(lt / 0.35)
-            if ka > 0:
-                lab = Image.new("RGBA", (600, 220), (0, 0, 0, 0)); ld = ImageDraw.Draw(lab)
-                ld.text((300, 110), s["label"], font=lf, fill=acc, anchor="mm")
-                paste_scaled(img, lab, W / 2, y - 170, max(0.01, ka))
-        for (fnt, ls, t0, t1, punch, text) in s["blocks"]:
-            words = " ".join(ls).split()
-            nw = len(words)
-            # words revealed proportional to characters spoken
-            prog = (t - t0) / max(0.1, (t1 - t0))
-            lens = np.cumsum([len(w) + 1 for w in words]); shown = int(np.searchsorted(lens, prog * lens[-1], side="right")) + (1 if prog > 0 else 0)
-            shown = min(nw, shown) if t >= t0 else 0
-            if s is shots[0] and s.get("intro"):
-                shown = nw  # first frame is the thumbnail in the feed: show the whole hook at once
-            lh = fnt.size * 1.15
-            wi = 0
-            for li, l in enumerate(ls):
-                lw = l.split(); x = W / 2 - tw(l, fnt) / 2
-                for w in lw:
-                    if wi < shown:
-                        wt = -1.0 if (s is shots[0] and s.get("intro")) else t0 + (t1 - t0) * ((lens[wi - 1] if wi else 0) / lens[-1])
-                        age = t - wt
-                        col = acc if punch else txc
-                        k = ease(age / 0.15)
-                        cc = col if k >= 1 else (int(bgc2[0] + (col[0] - bgc2[0]) * k), int(bgc2[1] + (col[1] - bgc2[1]) * k), int(bgc2[2] + (col[2] - bgc2[2]) * k), 255)
-                        d.text((x, y + li * lh + lh / 2 + 18 * (1 - k)), w, font=fnt, fill=cc, anchor="lm")
-                    x += tw(w + " ", fnt); wi += 1
-            y += len(ls) * lh + 50
-        # punch flash + shake
-        for (fnt, ls, t0, t1, punch, text) in s["blocks"]:
-            if punch and t0 <= t < t0 + 0.18 and scary:
-                img.alpha_composite(Image.new("RGBA", (W, H), (acc[0], acc[1], acc[2], int(90 * (1 - (t - t0) / 0.18)))))
-        if lt < 0.2 and s is not shots[0]:  # quick fade from black between cards
-            img = Image.blend(Image.new("RGBA", (W, H), (0, 0, 0, 255)), img, lt / 0.2)
-        # progress bar
-        if not s.get("intro") and s["label"]:
-            k = sum(1 for x in shots if not x.get("intro") and x["t0"] <= t)
-            tot = sum(1 for x in shots if not x.get("intro"))
-            ImageDraw.Draw(img).rectangle([0, H - 14, W * k / tot, H], fill=acc)
-        return img
-
-    times = [0.6] + [s["t0"] + (s["t1"] - s["t0"]) * 0.85 for s in shots if not s.get("intro")][:4] + [dur - 0.4]
-    return run(frame, n, vw, aw, out, preview, times), dur
-
-
-RENDERERS = {"chat": render_chat, "quiz": render_quiz, "kinetic": render_kinetic}
+RENDERERS = {"chat": render_chat, "quiz": render_quiz}
 
 
 def render(story, out, models, preview=None):

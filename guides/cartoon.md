@@ -2,7 +2,7 @@
 
 See EXPERIMENTS.md for slots and which format runs when. Each video is `stories/<SLOT>.json` → `videos/<SLOT>.mp4`, where SLOT = `YYYY-MM-DD-HHMM` in Berlin time (older files are plain dates). Read `posted.md` first and never reuse a premise, twist, setting combo, character name or title already listed there.
 
-**Keep only these the same every time:** the flat-illustration art style, the narrator voice and the caption style. **Everything else should change from video to video:** story type and structure, intro style, settings, scenes, season, background sound, sound effects, overlays and pacing. Look at the last ~8 entries in posted.md (they log story type, hook style and ambience) and pick a different combination.
+**Keep only these the same every time:** the flat-illustration art style and the caption style. The voice is set with `"voice"` (narrator default, or narrator_f, male2, british_m; see voice.py), mostly narrator; `"speed"` 0.95–1.05. **Everything else should change from video to video:** story type and structure, intro style, settings, scenes, season, background sound, sound effects, overlays and pacing. Look at the last ~8 entries in posted.md (they log story type, hook style and ambience) and pick a different combination.
 
 ## Story (must be COMPLETE, 40–60 seconds)
 - **14–20 beats, 110–160 words** (~40–60 s). Shorter is better: viewers must reach the end. Mostly one short sentence per beat, so the picture changes every 2–4 seconds. Use simple words that land when read aloud.

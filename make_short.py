@@ -38,7 +38,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 W, H, FPS = 1080, 1920, 30
 SS = 2            # supersampling for static art
 ZOOM = 1.16       # art is drawn this much larger for camera moves
-VOICE, SPEED = "am_echo", 1.08
+VOICE, SPEED = "narrator", 1.0   # see voice.py; a story can set "voice" and "speed"
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "fonts")
 
@@ -751,24 +751,20 @@ def build_overlay(beat):
 
 # ------------------------------------------------------------------ narration
 def narrate(beats, models, wav_path):
-    from kokoro_onnx import Kokoro
     import soundfile as sf
-    k = Kokoro(os.path.join(models, "kokoro-v1.0.int8.onnx"), os.path.join(models, "voices-v1.0.bin"))
+    import voice as V
     lead = 0.7 if beats and beats[0].get("hook") else 0.2
     sr, t = 24000, lead
     pieces, out = [np.zeros(int(sr * lead), np.float32)], []
     for b in beats:
         start, sents = t, []
-        for s in [x for x in re.split(r"(?<=[.!?…])[\"”']?\s+", b["text"].strip()) if x]:
-            a, sr = k.create(s, voice=VOICE, speed=SPEED, lang="en-us")
-            a = np.asarray(a, np.float32)
-            nz = np.where(np.abs(a) > 0.01)[0]
-            if len(nz):
-                a = a[max(0, nz[0] - 500): nz[-1] + 1000]
+        for s in V.sentences(b["text"]):
+            a = V.say_sentence(models, s, VOICE, SPEED)
             d = len(a) / sr
             sents.append((s, t, t + d))
-            pieces += [a, np.zeros(int(sr * 0.2), np.float32)]
-            t += d + 0.2
+            g = V.pause_after(s)
+            pieces += [a, np.zeros(int(sr * g), np.float32)]
+            t += d + g
         pieces.append(np.zeros(int(sr * 0.1), np.float32))
         t += 0.1
         out.append({"start": start, "end": t, "sents": sents})
@@ -956,6 +952,9 @@ def ease(x):
 
 
 def render(story, out, models, preview_dir=None):
+    global VOICE, SPEED
+    import voice as V
+    VOICE, SPEED = story.get("voice", "narrator"), story.get("speed", 1.0)
     beats = story["beats"]
     set_season(story.get("season", "autumn"))
     AMBIENCE[0] = story.get("ambience", {"summer": "crickets", "rain": "rain", "fog": "drone"}.get(story.get("season"), "wind"))
@@ -1081,7 +1080,7 @@ def render(story, out, models, preview_dir=None):
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
            "-i", wav, "-i", amb, "-filter_complex",
            f"[0:v]ass={ass}:fontsdir={FONTS},format=yuv420p[v];"
-           f"[1:a]aresample=48000,aecho=0.8:0.6:45:0.12,volume=1.0[vo];[2:a]volume=0.5[am];"
+           f"[1:a]aresample=48000{V.VOICE_FX}[vo];[2:a]volume=0.5[am];"
            f"[vo][am]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]",
            "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
            "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp]
@@ -1103,7 +1102,7 @@ if __name__ == "__main__":
     if "--preview" in a:
         i = a.index("--preview"); prev = a[i + 1]; del a[i:i + 2]
     story = json.load(open(a[0]))
-    if story.get("style") in ("chat", "quiz", "kinetic"):
+    if story.get("style") in ("chat", "quiz"):
         import formats
         res, dur = formats.render(story, a[1] if len(a) > 1 else "out.mp4", models, prev)
     elif story.get("style") == "footage":
