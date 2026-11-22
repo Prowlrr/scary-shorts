@@ -46,6 +46,7 @@ Always keep at least one experimental (unproven) format in ROTATION so we keep l
 | 2026-11-22-0000 | chat | Mom texted me while sitting next to me | 1,000 (~15 h old) | n/a | n/a |
 
 Views from the owner's YouTube app screenshot, 2026-11-22 ~15:30 Berlin (Metricool per-video stats were still null).
+2026-11-22 21:10 check: Metricool per-video YouTube stats (YTVP06/08/09) still null for every video; no new judged data, ROTATION unchanged.
 Medians: chat 1,000 (1 video), cartoon 509 (2), footage 189 (3). Chat is the leader after one video; the rule to double a format needs 3 judged videos, the owner chose to double chat early anyway (see ROTATION).
 Pattern: the three best videos all open on something you instantly read or react to: a readable text thread (chat 1k), a creepy face (basement 788, sleepwalking 653). The three weakest open on scenery (lake 230, trail cam 189, baby monitor 138). Make the first frame a face, a readable message or the hook text, never an empty scene.
 

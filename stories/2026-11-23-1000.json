@@ -1,0 +1,103 @@
+{
+ "style": "chat",
+ "title": "My Neighbor Texted Me That My Cat Has a Secret Second Family #shorts #textstory",
+ "description": "I thought Biscuit was just big-boned. My neighbor had other news.\n\nFollow for new stories every day.\n\n#textstory #shorts #funnytexts #cats",
+ "tags": [
+  "text story",
+  "text message story",
+  "funny texts",
+  "cat story",
+  "funny cats",
+  "shorts"
+ ],
+ "contact": "Unknown Number",
+ "avatar_color": "#ef6c00",
+ "theme": "light",
+ "ambience": "none",
+ "music": "upbeat",
+ "scary": false,
+ "voices": {
+  "me": "male",
+  "them": "female2",
+  "narrator": "narrator"
+ },
+ "messages": [
+  {
+   "from": "them",
+   "text": "Hi. Your cat is living a double life.",
+   "typing": false
+  },
+  {
+   "from": "me",
+   "text": "Sorry, who is this?"
+  },
+  {
+   "from": "them",
+   "text": "Your neighbor. Blue house. He eats dinner here every night."
+  },
+  {
+   "from": "me",
+   "text": "Biscuit? He eats at home. Twice a day."
+  },
+  {
+   "from": "them",
+   "text": "Here he's called Captain. He eats three times a day."
+  },
+  {
+   "from": "me",
+   "text": "THREE??",
+   "say": "Three?!"
+  },
+  {
+   "from": "me",
+   "text": "That explains why he's so round"
+  },
+  {
+   "from": "them",
+   "text": "My vet says he needs a diet."
+  },
+  {
+   "from": "me",
+   "text": "Your VET?? You took my cat to a vet?",
+   "say": "Your vet?! You took my cat to a vet?"
+  },
+  {
+   "from": "them",
+   "text": "He's fully vaccinated now. You're welcome."
+  },
+  {
+   "from": "me",
+   "text": "So is he. At MY vet. Twice now apparently.",
+   "say": "So is he. At my vet. Twice now, apparently."
+  },
+  {
+   "from": "them",
+   "text": "Weird question. Does he wear a red collar at your place?"
+  },
+  {
+   "from": "me",
+   "text": "No. He hates collars."
+  },
+  {
+   "from": "them",
+   "text": "He wears one at the yellow house."
+  },
+  {
+   "from": "them",
+   "text": "And a little bow tie at the house on the corner."
+  },
+  {
+   "from": "me",
+   "text": "How many families does my cat HAVE",
+   "say": "How many families does my cat have?!"
+  },
+  {
+   "from": "them",
+   "text": "We just made a group chat. There are six of us.",
+   "pause": 0.5
+  }
+ ],
+ "end": "Six families. One cat. Nobody owns Biscuit. Biscuit owns us.",
+ "end_say": "Six families. One cat. Nobody owns Biscuit. Biscuit owns us.",
+ "speed": 1.05
+}
