@@ -3,3 +3,4 @@ preview/
 *.part.mp4
 *.jpg
 x.mp4
+__pycache__/
