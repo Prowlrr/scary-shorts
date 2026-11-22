@@ -15,7 +15,9 @@ Takeaways: found footage is retired. The cartoon style did 2–6x better. All vi
 ## Active formats (rotate; never the same format twice in a row)
 Each run picks the format from the ROTATION below (the next one after the format of the last line in posted.md), reads its guide, writes `stories/SLOT.json` and renders with `python3 make_short.py stories/SLOT.json videos/SLOT.mp4`.
 
-ROTATION: chat, cartoon, quiz, cartoon
+ROTATION: chat, cartoon, chat, quiz
+
+(2026-11-22: owner doubled chat early: first chat Short hit 1k views in ~15 h, the channel's best so far.)
 
 | Format | `"style"` | Guide | Topic | Length |
 |---|---|---|---|---|
@@ -40,7 +42,7 @@ Always keep at least one experimental (unproven) format in ROTATION so we keep l
 | 2026-11-22-0000 | chat | Mom texted me while sitting next to me | 1,000 (~15 h old) | n/a | n/a |
 
 Views from the owner's YouTube app screenshot, 2026-11-22 ~15:30 Berlin (Metricool per-video stats were still null).
-Medians: chat 1,000 (1 video), cartoon 509 (2), footage 189 (3). Chat is the leader after one video; the rule to double a format needs 3 judged videos, so ROTATION is unchanged for now.
+Medians: chat 1,000 (1 video), cartoon 509 (2), footage 189 (3). Chat is the leader after one video; the rule to double a format needs 3 judged videos, the owner chose to double chat early anyway (see ROTATION).
 Pattern: the three best videos all open on something you instantly read or react to: a readable text thread (chat 1k), a creepy face (basement 788, sleepwalking 653). The three weakest open on scenery (lake 230, trail cam 189, baby monitor 138). Make the first frame a face, a readable message or the hook text, never an empty scene.
 
 ## Backlog of ideas to try
