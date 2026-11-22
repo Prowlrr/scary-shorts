@@ -38,6 +38,7 @@ Always keep at least one experimental (unproven) format in ROTATION so we keep l
 | 2026-11-21-0000 | footage | Baby monitor | n/a* | n/a | n/a |
 
 *2026-11-21 21:10 check: Metricool YTVP metrics returned the 4 videos but null views/duration/likes (sync lag). No new-format video is older than 48 h yet; ROTATION unchanged.
+*2026-11-22 15:10 check: still null views/duration/likes for all 4 listed videos; 11-21 18:00 and newer not yet in Metricool. Nothing judgeable; ROTATION unchanged.
 
 ## Backlog of ideas to try
 - "Would you rather" with a creepy twist, split-screen choices
