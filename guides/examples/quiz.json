@@ -1,11 +1,48 @@
-{"style":"quiz","title":"Only 1 in 10 People Solve All 4 Riddles #shorts #riddles","theme":"purple",
-"description":"Be honest. How many did you get?\n\n#riddles #brainteaser #quiz #shorts",
-"tags":["riddles","brain teasers","quiz","riddles with answers","shorts"],
-"intro":"Only 1 in 10 people solve all 4. Ready?",
-"questions":[
-{"q":"What gets wetter the more it dries?","a":"A towel","seconds":3},
-{"q":"The more you take, the more you leave behind. What are they?","a":"Footsteps","options":["Photos","Footsteps","Memories","Breaths"],"seconds":4},
-{"q":"What has hands but can't clap?","a":"A clock","seconds":3},
-{"q":"A man pushes his car to a hotel and loses all his money. How?","a":"He's playing Monopoly","options":["A robbery","A bet","He's playing Monopoly","A flat tire"],"seconds":4}
-],
-"outro":"How many did you get? Comment your score."}
+{
+ "style": "quiz",
+ "title": "Only 1 in 10 People Solve All 4 Riddles #shorts #riddles",
+ "theme": "purple",
+ "description": "Be honest. How many did you get?\n\n#riddles #brainteaser #quiz #shorts",
+ "tags": [
+  "riddles",
+  "brain teasers",
+  "quiz",
+  "riddles with answers",
+  "shorts"
+ ],
+ "questions": [
+  {
+   "q": "What gets wetter the more it dries?",
+   "a": "A towel",
+   "seconds": 3
+  },
+  {
+   "q": "The more you take, the more you leave behind. What are they?",
+   "a": "Footsteps",
+   "options": [
+    "Photos",
+    "Footsteps",
+    "Memories",
+    "Breaths"
+   ],
+   "seconds": 4
+  },
+  {
+   "q": "What has hands but can't clap?",
+   "a": "A clock",
+   "seconds": 3
+  },
+  {
+   "q": "A man pushes his car to a hotel and loses all his money. How?",
+   "a": "He's playing Monopoly",
+   "options": [
+    "A robbery",
+    "A bet",
+    "He's playing Monopoly",
+    "A flat tire"
+   ],
+   "seconds": 4
+  }
+ ],
+ "outro": "How many did you get? Comment your score."
+}

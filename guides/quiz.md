@@ -3,7 +3,7 @@
 Bright, upbeat, interactive. Each question slides in, a countdown ring ticks, then the answer pops up green. Viewers pause, guess, rewatch and comment their score. Renderer: `formats.py` (`"style": "quiz"`). Full example: `guides/examples/quiz.json`.
 
 ## Writing
-- **3–5 questions, 25–45 s total.** Intro hook ≤ 12 words ("Only 1 in 10 people solve all 4. Ready?"). Outro asks for a comment ("How many did you get? Comment your score.").
+- **3–5 questions, 25–45 s total.** **No intro/title card** (owner, 2026-11-22): never set `"intro"`; the video opens on riddle 1, already on screen at frame 0. Put the challenge ("Only 1 in 10 solve all 4") in the title instead. Outro asks for a comment ("How many did you get? Comment your score.").
 - Rotate the TOPIC each time (check posted.md): classic riddles · lateral-thinking puzzles · "what am I?" · math tricks (quick, no long calculations) · spooky riddles · logic ("which glass fills first" style, described in words) · word puzzles. Never repeat a riddle already used (search posted.md and stories/).
 - Order: easy first, hardest last. The last one should make people go "ohhh".
 - Answers are short (1–4 words). Every question and answer must be correct and unambiguous; for anything factual, double-check it.
@@ -15,7 +15,6 @@ Bright, upbeat, interactive. Each question slides in, a countdown ring ticks, th
 {"style": "quiz", "title": "... #shorts #riddles", "description": "...", "tags": [...],
  "theme": "purple | teal | orange | night | blue", "label": "RIDDLE | QUESTION | PUZZLE",
  "voice": "narrator_f", "music": "upbeat",
- "intro": "...",
  "questions": [{"q": "What has hands but can't clap?", "a": "A clock", "seconds": 3,
                 "options": ["A clock", "A tree", "A glove", "A robot"], "why": "optional short explanation"}],
  "outro": "..."}

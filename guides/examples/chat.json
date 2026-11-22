@@ -15,8 +15,12 @@
  "theme": "dark",
  "ambience": "drone",
  "music": "tense",
- "hook": "My mom texted me while she was sitting right next to me",
  "messages": [
+  {
+   "from": "them",
+   "text": "Who is sitting next to you right now?",
+   "typing": false
+  },
   {
    "from": "them",
    "text": "Are you home yet?"

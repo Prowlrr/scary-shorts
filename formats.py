@@ -308,9 +308,11 @@ def render_chat(story, out, models, preview=None):
     voices = {"me": "male", "them": "female", "narrator": "narrator"}; voices.update(story.get("voices", {}))
     speed = story.get("speed", 1.0)
     contact = story.get("contact", "Unknown")
-    tr = Track(models, lead=0.3)
-    items = []  # dict(kind, img, me, t_in, typing_from)
     hook = story.get("hook")
+    # No hook banner (default since 2026-11-22): the first message is on screen from frame 0, no typing dots, no pop.
+    tr = Track(models, lead=0.3 if hook else 0.0)
+    items = []  # dict(kind, img, me, t_in, typing_from)
+    first = not hook
     if hook:
         tr.fx("pop", 0.05)
         a, b = tr.say(story.get("hook_say", hook), voices.get("narrator", "narrator"), speed)
@@ -319,7 +321,7 @@ def render_chat(story, out, models, preview=None):
     for m in story["messages"]:
         kind = m.get("from", "them")
         if kind == "system":
-            items.append(dict(img=chat_system(m["text"], th), me=None, t_in=tr.t, sys=True))
+            items.append(dict(img=chat_system(m["text"], th), me=None, t_in=tr.t, sys=True, nopop=first)); first = False
             tr.fx("pop", tr.t, 0.5)
             if m.get("say"):
                 tr.say(m["say"], voices.get("narrator", "narrator"), speed)
@@ -327,14 +329,14 @@ def render_chat(story, out, models, preview=None):
             continue
         me = kind == "me"
         typing_from = None
-        if not me and m.get("typing", True):
+        if not me and m.get("typing", True) and not first:
             typing_from = tr.t; tr.fx("typing", tr.t, 0.8); tr.gap(m.get("typing_time", 0.7))
         t_in = tr.t
         tr.fx("pop", t_in)
         if m.get("sfx"):
             for s in m["sfx"]:
                 tr.fx(s, t_in + 0.1)
-        items.append(dict(img=chat_bubble(m["text"], me, th), me=me, t_in=t_in, typing_from=typing_from, sys=False))
+        items.append(dict(img=chat_bubble(m["text"], me, th), me=me, t_in=t_in, typing_from=typing_from, sys=False, nopop=first)); first = False
         v = voices.get(m.get("voice", kind), voices.get("them"))
         tr.say(m.get("say", m["text"]), v, speed)
         tr.gap(m.get("pause", 0.35))
@@ -399,7 +401,7 @@ def render_chat(story, out, models, preview=None):
             if yy + it["img"].height < 300 or yy > H:
                 continue
             age = t - it["t_in"]
-            s = 0.6 + 0.4 * back(age / 0.22) if age < 0.22 else 1.0
+            s = 0.6 + 0.4 * back(age / 0.22) if (age < 0.22 and not it.get("nopop")) else 1.0
             im = it["img"]
             if it["sys"]:
                 x = W / 2
@@ -460,6 +462,8 @@ def render_quiz(story, out, models, preview=None):
             tr.gap(0.1); tr.say(q["why"], voice, speed)
         tr.gap(0.5)
         segs.append(dict(kind="q", i=i, q=q, t0=t0, c0=c0, secs=secs, r0=r0, t1=tr.t))
+    if not intro and segs:
+        segs[0]["t0"] = 0  # riddle 1 covers the lead-in, so frame 0 is never blank
     outro = story.get("outro")
     if outro:
         t0 = tr.t; tr.fx("pop", t0); tr.say(outro, voice, speed)
@@ -544,7 +548,8 @@ def render_quiz(story, out, models, preview=None):
             col = accent if k < i else ((255, 255, 255, 255) if k == i else (255, 255, 255, 90))
             d.ellipse([cx - 12, 300 - 12, cx + 12, 300 + 12], fill=col)
         # question card slides in
-        k = back(lt / 0.4)
+        # no intro card (default since 2026-11-22): riddle 1 is fully on screen from frame 0
+        k = 1.0 if (i == 0 and not intro) else back(lt / 0.4)
         qy = 360 + qi.height / 2
         paste_scaled(img, qi, W / 2 + (1 - min(1, k)) * W, qy, 1.0)
         y_after = 360 + qi.height + 50

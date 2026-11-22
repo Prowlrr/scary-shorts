@@ -1,10 +1,10 @@
 # Format: chat (text-message story)
 
-A Short that looks like a phone chat thread. Bubbles pop in one by one with a typing indicator, and two voices read them. It opens with a big hook banner and ends with a big end banner. Renderer: `formats.py` (`"style": "chat"`). Full example: `guides/examples/chat.json`.
+A Short that looks like a phone chat thread. Bubbles pop in one by one with a typing indicator, and two voices read them. **No title/hook banner at the start** (owner, 2026-11-22): the video opens straight on the chat, with the first message already on screen at frame 0. It ends with a big end banner. Renderer: `formats.py` (`"style": "chat"`). Full example: `guides/examples/chat.json`.
 
 ## Writing
 - **12–20 messages, 30–55 s.** Every message is short, like a real text: 3–12 words. No long paragraphs.
-- The hook banner (`"hook"`) is the most important line: a strange or impossible situation in ≤ 12 words ("My mom texted me while she was sitting next to me").
+- Never set `"hook"`. The FIRST MESSAGE is the hook and the most important line: it must be strange or alarming on its own, 3–12 words, so the opening frame stops the scroll (e.g. Mom: "Who is sitting next to you right now?", Unknown Number: "Don't open the door. It isn't him."). No small talk like "Are you home yet?" first.
 - Escalate fast: something is off by message 3, getting worse by message 8, and the twist lands in the last 2–3 messages or in the `"end"` banner.
 - Rotate the GENRE (check posted.md): scary (impostor, wrong number, someone watching), funny (a misunderstanding that keeps getting worse, a parent who can't use their phone), wholesome (a wrong number that turns into something kind), drama (a twist reveal). At least 1 in 3 chat videos should NOT be scary.
 - No real people, brands or app names. Contact names are generic ("Mom", "Unknown Number", "Jake", "Landlord").
@@ -16,7 +16,6 @@ A Short that looks like a phone chat thread. Bubbles pop in one by one with a ty
  "contact": "Mom", "avatar_color": "#c2185b", "theme": "dark | light | green",
  "ambience": "drone | quiet | rain | wind | none", "music": "tense | upbeat | (leave out)",
  "voices": {"me": "male", "them": "female", "narrator": "narrator"},   (optional; presets from voice.py)
- "hook": "big banner text read at the start",
  "messages": [
    {"from": "them", "text": "Are you home yet?"},
    {"from": "me", "text": "Yeah lol", "pause": 0.6},
