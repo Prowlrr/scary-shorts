@@ -32,13 +32,16 @@ Always keep at least one experimental (unproven) format in ROTATION so we keep l
 ## RESULTS (views / avg view duration, filled by the runs)
 | Slot | Format | Title | Views | Avg dur | Likes |
 |---|---|---|---|---|---|
-| 2026-11-19 | cartoon | Lake campground rules | n/a* | n/a | n/a |
-| 2026-11-20 | cartoon | Man in the basement counting | n/a* | n/a | n/a |
-| 2026-11-20-1800 | footage | Trail camera | n/a* | n/a | n/a |
-| 2026-11-21-0000 | footage | Baby monitor | n/a* | n/a | n/a |
+| 2026-11-19 | cartoon | Lake campground rules | 230 | n/a | n/a |
+| 2026-11-20 | cartoon | Man in the basement counting | 788 | n/a | n/a |
+| 2026-11-20-1800 | footage | Trail camera | 189 | n/a | n/a |
+| 2026-11-21-0000 | footage | Baby monitor | 138 | n/a | n/a |
+| 2026-11-21-1800 | footage | Sleepwalking attic | 653 | n/a | n/a |
+| 2026-11-22-0000 | chat | Mom texted me while sitting next to me | 1,000 (~15 h old) | n/a | n/a |
 
-*2026-11-21 21:10 check: Metricool YTVP metrics returned the 4 videos but null views/duration/likes (sync lag). No new-format video is older than 48 h yet; ROTATION unchanged.
-*2026-11-22 15:10 check: still null views/duration/likes for all 4 listed videos; 11-21 18:00 and newer not yet in Metricool. Nothing judgeable; ROTATION unchanged.
+Views from the owner's YouTube app screenshot, 2026-11-22 ~15:30 Berlin (Metricool per-video stats were still null).
+Medians: chat 1,000 (1 video), cartoon 509 (2), footage 189 (3). Chat is the leader after one video; the rule to double a format needs 3 judged videos, so ROTATION is unchanged for now.
+Pattern: the three best videos all open on something you instantly read or react to: a readable text thread (chat 1k), a creepy face (basement 788, sleepwalking 653). The three weakest open on scenery (lake 230, trail cam 189, baby monitor 138). Make the first frame a face, a readable message or the hook text, never an empty scene.
 
 ## Backlog of ideas to try
 - "Would you rather" with a creepy twist, split-screen choices
