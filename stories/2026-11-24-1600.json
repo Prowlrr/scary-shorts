@@ -1,0 +1,46 @@
+{
+ "style": "chat",
+ "title": "A Stranger Texted Me That My Dog Was Sleeping on Her Porch #shorts #textstory",
+ "description": "I don't have a dog. His tag says otherwise.\n\nFollow for new stories every day.\n\n#textstory #shorts #wholesome #dogs",
+ "tags": [
+  "text story",
+  "text message story",
+  "wholesome texts",
+  "wrong number",
+  "dog story",
+  "shorts"
+ ],
+ "contact": "Unknown Number",
+ "avatar_color": "#2e7d32",
+ "theme": "light",
+ "ambience": "quiet",
+ "scary": false,
+ "voices": {
+  "me": "male2",
+  "them": "female",
+  "narrator": "narrator_f"
+ },
+ "messages": [
+  {"from": "them", "text": "Your dog has slept on my porch for three nights.", "typing": false},
+  {"from": "me", "text": "I don't have a dog?"},
+  {"from": "them", "text": "His tag has this number on it. His name is Pickles."},
+  {"from": "me", "text": "I only got this number two weeks ago."},
+  {"from": "them", "text": "Well, Pickles thinks you're his person."},
+  {"from": "system", "text": "Photo received", "sfx": ["ding"]},
+  {"from": "me", "text": "Oh no. He's so grey."},
+  {"from": "them", "text": "Vet says he's fourteen. His chip says Walter."},
+  {"from": "me", "text": "Can you call Walter?"},
+  {"from": "them", "text": "I did. Walter passed away last month.", "pause": 0.6},
+  {"from": "them", "text": "His daughter says Pickles ran off after the funeral."},
+  {"from": "me", "text": "He's been looking for him."},
+  {"from": "them", "text": "She lives overseas. She can't take him."},
+  {"from": "them", "text": "The shelter opens at nine."},
+  {"from": "me", "text": "Wait. What's your address?"},
+  {"from": "system", "text": "Next morning"},
+  {"from": "me", "text": "He's in my car. He put his head on my shoulder."},
+  {"from": "them", "text": "Walter would like that."},
+  {"from": "me", "text": "I'm keeping this number. In case he calls it again."}
+ ],
+ "end": "Pickles kept calling Walter's number. Someone finally answered.",
+ "end_say": "Pickles kept calling Walter's number. Someone finally answered."
+}
