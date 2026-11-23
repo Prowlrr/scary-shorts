@@ -1,0 +1,150 @@
+{
+ "title": "My Town Sets One Extra Plate Every November. I Didn't. #shorts #scarystories",
+ "description": "Nobody in town says who the extra plate is for. Now I know.\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts",
+ "tags": [
+  "scary stories",
+  "small town horror",
+  "creepy",
+  "horror shorts",
+  "short horror story",
+  "shorts"
+ ],
+ "season": "fog",
+ "ambience": "wind",
+ "voice": "narrator",
+ "speed": 0.98,
+ "beats": [
+  {
+   "text": "Every November, my whole town sets one extra plate at dinner.",
+   "scene": "town",
+   "people": 3,
+   "overlay": {
+    "type": "sign",
+    "name": "HARLOW CREEK",
+    "sub": "Set a place for him tonight"
+   },
+   "hook": "quiet"
+  },
+  {
+   "text": "Nobody says who it's for. You just do it.",
+   "scene": "livingroom",
+   "people": 2
+  },
+  {
+   "text": "I'd just moved here alone. I thought it was a joke.",
+   "scene": "kitchen",
+   "people": 0
+  },
+  {
+   "text": "So I didn't set the plate.",
+   "scene": "kitchen",
+   "people": 0,
+   "overlay": {
+    "type": "label",
+    "text": "1 PLATE"
+   }
+  },
+  {
+   "text": "At nine, someone knocked.",
+   "scene": "door",
+   "sfx": [
+    "knock"
+   ],
+   "overlay": {
+    "type": "clock",
+    "time": "9:00 PM"
+   }
+  },
+  {
+   "text": "My neighbor Ruth, pale, holding a plate.",
+   "scene": "street",
+   "people": 1,
+   "mood": "scared"
+  },
+  {
+   "text": "She said, take mine. He's counting the houses.",
+   "scene": "door",
+   "people": 1
+  },
+  {
+   "text": "I laughed and shut the door.",
+   "scene": "hallway",
+   "people": 0
+  },
+  {
+   "text": "At midnight, the lights died.",
+   "scene": "livingroom",
+   "flicker": true,
+   "people": 0,
+   "overlay": {
+    "type": "clock",
+    "time": "12:00 AM"
+   }
+  },
+  {
+   "text": "Every window on the street held one candle. Except mine.",
+   "scene": "window",
+   "figure": true,
+   "transition": "fade"
+  },
+  {
+   "text": "Footsteps crossed my kitchen. A chair scraped back.",
+   "scene": "kitchen",
+   "figure": true,
+   "shake": true,
+   "sfx": [
+    "footsteps",
+    {
+     "name": "creak",
+     "at": 0.6
+    }
+   ]
+  },
+  {
+   "text": "Something sat at my table. Waiting.",
+   "scene": "face"
+  },
+  {
+   "text": "I grabbed Ruth's plate and slid it across.",
+   "scene": "kitchen",
+   "figure": true,
+   "mood": "scared"
+  },
+  {
+   "text": "It ate. Slowly. Then it stood, and left.",
+   "scene": "hallway",
+   "figure": true,
+   "transition": "fade"
+  },
+  {
+   "text": "In the morning, Ruth's house was dark.",
+   "scene": "street",
+   "people": 2,
+   "figure": false
+  },
+  {
+   "text": "She'd given me her only plate.",
+   "scene": "cemetery",
+   "people": 3,
+   "shake": true
+  },
+  {
+   "text": "Her empty table was the one he visited next.",
+   "scene": "livingroom",
+   "people": 0,
+   "figure": true
+  },
+  {
+   "text": "A new family moved in across the street today.",
+   "scene": "town",
+   "people": 3,
+   "transition": "flash"
+  },
+  {
+   "text": "I'll bring them a plate. Just not mine.",
+   "scene": "kitchen",
+   "people": 0,
+   "mood": "scared"
+  }
+ ]
+}
