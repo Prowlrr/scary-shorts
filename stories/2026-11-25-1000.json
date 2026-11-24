@@ -1,0 +1,17 @@
+{
+ "style": "quiz",
+ "title": "4 Easy Math Questions Almost Everyone Gets Wrong #shorts #brainteaser",
+ "theme": "teal",
+ "label": "PUZZLE",
+ "description": "Read every word carefully. Number 4 tricks almost everyone.\n\n#riddles #brainteaser #quiz #shorts",
+ "tags": ["riddles", "brain teasers", "math tricks", "quiz", "riddles with answers", "shorts"],
+ "voice": "narrator_f",
+ "music": "upbeat",
+ "questions": [
+  {"q": "You have 3 apples. You take away 2. How many apples do you have?", "a": "2", "options": ["1", "2", "3", "5"], "seconds": 3, "why": "You took them."},
+  {"q": "A farmer has 17 sheep. All but 9 run away. How many are left?", "a": "9", "seconds": 4},
+  {"q": "How many times can you subtract 5 from 25?", "a": "Once", "options": ["Five times", "Four times", "Once", "Never"], "seconds": 4, "why": "After that, it's 20."},
+  {"q": "Divide 30 by one half, then add 10. What do you get?", "a": "70", "options": ["25", "40", "70", "20"], "seconds": 5, "why": "30 divided by one half is 60."}
+ ],
+ "outro": "How many did you get? Comment your score."
+}
