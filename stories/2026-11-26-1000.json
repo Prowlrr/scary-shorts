@@ -1,0 +1,135 @@
+{
+ "title": "My Reflection Moved Half a Second Late #shorts #scarystories",
+ "description": "My brother knew something I didn't: which side my scar is on.\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts",
+ "tags": [
+  "scary stories",
+  "mirror horror",
+  "creepy",
+  "horror shorts",
+  "short horror story",
+  "shorts"
+ ],
+ "season": "rain",
+ "ambience": "rain",
+ "voice": "narrator_f",
+ "speed": 1.0,
+ "beats": [
+  {
+   "text": "Last night my reflection smiled. I wasn't smiling.",
+   "scene": "face",
+   "hook": "flash"
+  },
+  {
+   "text": "A storm cut the power. I brushed my teeth by candlelight.",
+   "scene": "bathroom",
+   "people": 0,
+   "flicker": true
+  },
+  {
+   "text": "Same pajamas, same scar. But it moved half a second late.",
+   "scene": "bathroom",
+   "people": 0,
+   "mood": "scared"
+  },
+  {
+   "text": "I blamed the candle and went to bed.",
+   "scene": "bedroom",
+   "people": 0,
+   "transition": "fade"
+  },
+  {
+   "text": "At three, I heard the bathroom tap running.",
+   "scene": "bedroom",
+   "people": 0,
+   "overlay": {
+    "type": "clock",
+    "time": "3:07 AM"
+   }
+  },
+  {
+   "text": "The mirror was fogged over. Something had written in the steam.",
+   "scene": "bathroom",
+   "figure": true
+  },
+  {
+   "text": "Let me out.",
+   "scene": "bathroom",
+   "shake": true,
+   "overlay": {
+    "type": "label",
+    "text": "LET ME OUT"
+   }
+  },
+  {
+   "text": "I texted my brother Sam.",
+   "scene": "phone",
+   "overlay": {
+    "type": "text",
+    "from": "Sam",
+    "message": "Coming now. Stay out of the bathroom."
+   }
+  },
+  {
+   "text": "He ran through the rain, and I opened the door.",
+   "scene": "street",
+   "people": 1,
+   "transition": "fade"
+  },
+  {
+   "text": "He looked at me. Then he stepped back.",
+   "scene": "door",
+   "people": 1,
+   "mood": "scared"
+  },
+  {
+   "text": "He said, my sister's scar is on her left cheek.",
+   "scene": "livingroom",
+   "people": 1
+  },
+  {
+   "text": "I touched my face. Mine was on the right.",
+   "scene": "livingroom",
+   "people": 1,
+   "mood": "scared",
+   "shake": true
+  },
+  {
+   "text": "Down the hall, something pounded on glass.",
+   "scene": "hallway",
+   "flicker": true,
+   "sfx": [
+    "knock"
+   ]
+  },
+  {
+   "text": "Behind the mirror, a girl in my pajamas screamed his name.",
+   "scene": "bathroom",
+   "figure": true,
+   "transition": "flash",
+   "shake": true
+  },
+  {
+   "text": "Sam pressed his hand to the glass. She pressed hers back.",
+   "scene": "bathroom",
+   "people": 1
+  },
+  {
+   "text": "So I blew out the candle.",
+   "scene": "hallway",
+   "people": 0,
+   "flicker": true
+  },
+  {
+   "text": "In the dark, he can't tell which one of us is real.",
+   "scene": "livingroom",
+   "people": 1,
+   "figure": true
+  },
+  {
+   "text": "And I'm the one on his side of the glass.",
+   "scene": "bathroom",
+   "people": 0,
+   "mood": "scared"
+  }
+ ]
+}
