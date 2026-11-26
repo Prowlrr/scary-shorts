@@ -13,6 +13,7 @@ Started 2026-11-21 after the found-footage run flopped. Voices: since 2026-11-21
 Takeaways: found footage is retired. The cartoon style did 2–6x better. All videos were long (90–107 s); Shorts reward completion, so every new format is **20–60 s**.
 
 ## Posting slots and openings (owner, 2026-11-22)
+- **For the scheduled runs:** use 10:00 and 16:00 Berlin as the slot times. If the run's instructions still say 18:00 and 00:00, that text is outdated; this file wins. Likewise, pick the format with "How to find the next format" below and follow "Rules for every video".
 - 2 Shorts a day at **10:00 and 16:00 Europe/Berlin** (was 18:00 and 00:00). Metricool's YouTube best-time data peaks at 16:00 every day of the week, with a second peak at 10:00; evenings after 19:00 and nights are 3–8x weaker.
 - **No title/intro card at the start of any video.** Chat opens straight on the thread with the first message on screen; quiz opens on riddle 1. Cartoon already opens straight into the story.
 
