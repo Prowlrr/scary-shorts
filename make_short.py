@@ -1102,7 +1102,7 @@ if __name__ == "__main__":
     if "--preview" in a:
         i = a.index("--preview"); prev = a[i + 1]; del a[i:i + 2]
     story = json.load(open(a[0]))
-    if story.get("style") in ("chat", "quiz"):
+    if story.get("style") in ("chat", "quiz", "wyr"):
         import formats
         res, dur = formats.render(story, a[1] if len(a) > 1 else "out.mp4", models, prev)
     elif story.get("style") == "footage":

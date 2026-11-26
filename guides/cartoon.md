@@ -9,6 +9,7 @@ See EXPERIMENTS.md for slots and which format runs when. Each video is `stories/
 - It needs a full arc (setup → escalation → climax → resolution that answers the mystery → final chilling line). Never end on "to be continued", "part 2" or an unexplained cliffhanger. No moral, no "the end", no question to the audience.
 - **Rotate the story TYPE**, never the same type twice in a row:
   first-person confession · "rules" job (night guard, babysitter, motel clerk) · text-message thread / wrong number · urban legend told as fact · second-person "you" scenario · found diary or voicemail · creepy neighbor · road trip / gas station / hitchhiker · camping or lake trip · haunted house move-in · twin, doppelgänger or mimic · missing time · kid's imaginary friend · something in the mirror · sleep paralysis · small-town tradition · a "true" story from someone's grandpa
+- **Loop ending (about 1 in 3 cartoons):** the final line is still a complete ending, but it leads straight back into beat 1 so the replay feels seamless (e.g. last line "…and that's when I heard him start counting again." with beat 1 "One. Two. Three."). Log `loop` in posted.md.
 - **Rotate the TWIST type:** the narrator was wrong about who is who · it was inside the whole time · it's still happening · the helper was the monster · the rule was a lie · a time loop · a reveal in the last text message · a quiet, sad ending · a hopeful but eerie ending.
 - Keep it PG-13: dread and suspense, no gore, no self-harm, no real people, places or brands, no copyrighted characters.
 

@@ -1,0 +1,21 @@
+{
+ "style": "wyr",
+ "title": "Would You Rather: The Creepy Version (Every Choice Has a Catch) #shorts #wouldyourather",
+ "description": "Every choice has a catch. Which one would you survive?\n\n#wouldyourather #scary #quiz #shorts",
+ "tags": ["would you rather", "would you rather scary", "creepy would you rather", "this or that", "shorts"],
+ "theme": "night",
+ "voice": "narrator",
+ "music": "tense",
+ "ambience": "drone",
+ "scary": true,
+ "questions": [
+  {"a": "Hear knocking every night at 3 AM", "b": "Find a new photo of yourself sleeping every morning", "seconds": 3,
+   "a_catch": "The knocking is coming from inside your closet."},
+  {"a": "Live in a house where the lights never turn off", "b": "Live in a house where the doors never lock", "seconds": 3,
+   "b_catch": "Something already knows the doors don't lock."},
+  {"a": "Always know when someone is lying", "b": "Always know when someone is behind you", "seconds": 4,
+   "a_catch": "Everyone lies to you about one thing: that you're alone.",
+   "b_catch": "Someone always is."}
+ ],
+ "outro": "A or B? Comment your picks."
+}

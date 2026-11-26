@@ -17,17 +17,30 @@ Takeaways: found footage is retired. The cartoon style did 2–6x better. All vi
 - **No title/intro card at the start of any video.** Chat opens straight on the thread with the first message on screen; quiz opens on riddle 1. Cartoon already opens straight into the story.
 
 ## Active formats (rotate; never the same format twice in a row)
-Each run picks the format from the ROTATION below (the next one after the format of the last line in posted.md), reads its guide, writes `stories/SLOT.json` and renders with `python3 make_short.py stories/SLOT.json videos/SLOT.mp4`.
+Each run picks the format from the ROTATION below (see "How to find the next format"), reads its guide, writes `stories/SLOT.json` and renders with `python3 make_short.py stories/SLOT.json videos/SLOT.mp4`.
 
-ROTATION: chat, cartoon, chat, quiz
+ROTATION: chat, cartoon, chat, quiz, cartoon, wyr
+
+How to find the next format: take the formats of the LAST TWO lines in posted.md, find that pair in the ROTATION (wrapping around), and use the format after it. If the pair isn't in the ROTATION (e.g. right after a rotation change), use the next format after the last line's format that isn't the same format.
 
 (2026-11-22: owner doubled chat early: first chat Short hit 1k views in ~15 h, the channel's best so far.)
+(2026-11-26: added wyr (Would You Rather with a creepy catch) as the experimental format, and a second cartoon slot so the proven story format gets more data; chat stays at 2 of 6. Reason: owner asked for changes based on research into what works for faceless Shorts; wyr was the most-recommended interactive format and cartoon has 3 videos with no data yet.)
 
 | Format | `"style"` | Guide | Topic | Length |
 |---|---|---|---|---|
 | cartoon | (none) | guides/cartoon.md | scary story, flat illustration (proven: 224–764 views) | 40–60 s |
 | chat | chat | guides/chat.md | text-message thread story (scary, funny or drama) | 30–55 s |
 | quiz | quiz | guides/quiz.md | riddles / brain teasers with countdown, not scary | 25–45 s |
+| wyr | wyr | guides/wyr.md | Would You Rather, split screen + "THE CATCH" twist (experimental, from 2026-11-26) | 30–45 s |
+
+## Rules for every video (2026-11-26, from research on what works and YouTube's 2025–26 crackdown on mass-produced AI content)
+YouTube now demonetizes, and under its spam rules can terminate, channels whose videos look template-made: same script skeleton with swapped names, near-identical uploads, AI voice reading generic text. AI voices are allowed; sameness is the risk. So:
+1. **Every video must differ in substance, not just names.** Before writing, read the last 6 lines of posted.md and change at least 3 of: story structure, length (use the whole allowed range, not always ~45 s), voice preset, theme/season/colours, music/ambience, hook style, ending type. Never reuse a premise or twist.
+2. **Frame 0 = the most striking moment.** The first frame must be a face, a readable alarming message, or the scariest line, never scenery or setup. The first spoken line must open a question in under 2 s ("I found my dead brother's phone. It had videos from after his funeral." not "This happened last summer.").
+3. **Loop endings (experiment): about 1 in 3 story videos (cartoon or chat) ends on a line that leads straight back into the first line,** so the replay feels seamless. Note `loop` in the posted.md line.
+4. **Series (experiment): "Unknown Number".** The next 3 scary chat videos form a 3-part series with the same contact "Unknown Number" and the same narrator. Each part is a complete, satisfying mini-story, but parts 1 and 2 end with a `system` line or end banner teasing the next part ("Part 2 tomorrow"). Titles: "… (Part 1)". Funny/wholesome chats can be scheduled in between as usual. Log `series Unknown Number N/3` in posted.md. After part 3, compare its views with the single chats before running another series.
+5. **Disclosure:** keep `isAiGeneratedContent: false` only because nothing realistic is synthesized (cartoon art, chat UI, quiz cards). If a format ever uses realistic AI people, places or footage, set it to true.
+6. Max 2 uploads a day. Don't increase the volume.
 
 ## Evaluating
 Each run, call Metricool getAnalyticsDataByMetrics (brandId 8217087, metrics YTVP17 title, YTVP02 published, YTVP06 views, YTVP08 avg view duration, YTVP09 likes, YTVP11 comments, YTVP12 shares) for the last 10 days and update the RESULTS table below (YouTube stats lag ~48 h; only judge videos older than 48 h). After a format has 3+ judged videos:
@@ -57,12 +70,14 @@ Views from the owner's YouTube app screenshot, 2026-11-22 ~15:30 Berlin (Metrico
 Medians: chat 1,000 (1 video), cartoon 509 (2), footage 189 (3). Chat is the leader after one video; the rule to double a format needs 3 judged videos, the owner chose to double chat early anyway (see ROTATION).
 Pattern: the three best videos all open on something you instantly read or react to: a readable text thread (chat 1k), a creepy face (basement 788, sleepwalking 653). The three weakest open on scenery (lake 230, trail cam 189, baby monitor 138). Make the first frame a face, a readable message or the hook text, never an empty scene.
 
-## Backlog of ideas to try
-- "Would you rather" with a creepy twist, split-screen choices
-- Unsolved-mystery / weird-history explainers (facts must be web-verified)
-- Loop stories (last line flows into the first line to boost replays)
+## Backlog of ideas to try (next first)
+- Unsolved-mystery / weird-history explainers (facts must be web-verified). Research says narrative/history formats hold viewers best.
+- "What would you do?" second-person horror scenario with a choice at the end (viewers comment)
 - Satisfying procedural animation background + short story text
+- (now running: "Would You Rather" → wyr format; loop endings and the "Unknown Number" series → Rules above)
+
+Judging note (2026-11-26): research suggests 60–90 videos before judging a channel, and Shorts stats lag. Don't drop a format on fewer than 3 videos that are each at least 72 h old.
 
 ## Retired
 - kinetic typography (two-sentence horror / rules lists): scrapped by the owner on 2026-11-21 before it was posted. Don't bring it back.
-- found footage (guides/footage.md): 117–141 views, 3 videos, 90+ s each.
+- found footage (guides/footage.md): 3 videos, 90+ s each. Retired on 117–141 views checked too early; Sleepwalking later reached 653 (2026-11-22), so footage may deserve a 45 s retry with a face/text first frame if a slot opens.

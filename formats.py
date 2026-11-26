@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Experimental Short formats: chat (text-message story) and quiz (riddles with countdown).
+"""Experimental Short formats: chat (text-message story), quiz (riddles with countdown) and wyr (would you rather).
 
-Called from make_short.py when story["style"] is chat | quiz. Voices come from voice.py.
+Called from make_short.py when story["style"] is chat | quiz | wyr. Voices come from voice.py.
 Each renderer builds a list of voice segments, renders frames with Pillow and encodes with ffmpeg.
 """
 import math, os, re, subprocess, sys, tempfile
@@ -598,7 +598,135 @@ def render_quiz(story, out, models, preview=None):
     return run(frame, n, vw, aw, out, preview, times), dur
 
 
-RENDERERS = {"chat": render_chat, "quiz": render_quiz}
+WYR_THEMES = {  # (top panel A, bottom panel B, accent)
+    "classic": ("#e53935", "#1e88e5", "#ffd54f"),
+    "night": ("#4a148c", "#00695c", "#ff5252"),
+    "sunset": ("#ef6c00", "#6a1b9a", "#fff176"),
+    "mint": ("#00897b", "#c2185b", "#ffffff"),
+}
+
+
+def render_wyr(story, out, models, preview=None):
+    """Would You Rather: split screen A (top) vs B (bottom), countdown, then 'THE CATCH' twist on one or both."""
+    ca, cb, acc = WYR_THEMES.get(story.get("theme", "classic"), WYR_THEMES["classic"])
+    voice = story.get("voice", "narrator"); speed = story.get("speed", 1.03)
+    qs = story["questions"]
+    tr = Track(models, lead=0.2)
+    segs = []
+    for i, q in enumerate(qs):
+        t0 = tr.t; tr.fx("swoosh", max(0, t0 - 0.1))
+        tr.say(q.get("say", f"Would you rather {q['a']}"), voice, speed); tr.gap(0.15)
+        b0 = tr.t; tr.fx("pop", b0)
+        tr.say(q.get("b_say", f"or {q['b']}?"), voice, speed); tr.gap(0.2)
+        c0 = tr.t; secs = q.get("seconds", 3)
+        for s in range(secs):
+            tr.fx("tick", c0 + s)
+        tr.gap(secs)
+        r0 = tr.t; ca_t = cb_t = None
+        if q.get("a_catch") or q.get("b_catch"):
+            tr.fx("stinger" if story.get("scary") else "correct", r0, 0.6)
+            tr.say(q.get("catch_say", "But here's the catch."), voice, speed); tr.gap(0.1)
+            if q.get("a_catch"):
+                ca_t = tr.t; tr.say(q["a_catch"], voice, speed); tr.gap(0.15)
+            if q.get("b_catch"):
+                cb_t = tr.t; tr.say(q["b_catch"], voice, speed); tr.gap(0.15)
+        tr.gap(0.6)
+        segs.append(dict(kind="q", i=i, q=q, t0=t0, b0=b0, c0=c0, secs=secs, r0=r0, ca=ca_t, cb=cb_t, t1=tr.t))
+    segs[0]["t0"] = 0  # first dilemma fully on screen at frame 0
+    outro = story.get("outro", "A or B? Comment your picks.")
+    t0 = tr.t; tr.fx("pop", t0); tr.say(outro, voice, speed)
+    segs.append(dict(kind="outro", t0=t0, t1=tr.t + 0.8))
+    work = tempfile.mkdtemp(prefix="wyr_")
+    vw, aw, dur = tr.write(work, bed=story.get("ambience", "none"), music=story.get("music", "upbeat"))
+    n = int(dur * FPS)
+    accent = hexc(acc)
+    top = vgrad(hexc(ca), tuple(int(v * 0.7) for v in hexc(ca)[:3]) + (255,), W, H // 2)
+    bot = vgrad(tuple(int(v * 0.7) for v in hexc(cb)[:3]) + (255,), hexc(cb), W, H // 2)
+    label = story.get("label", "WOULD YOU RATHER")
+
+    def opt_card(text):
+        f, ls = fit_font(text, "mont", 900, 400, 78, 44, 800, 1.18)
+        lh = int(f.size * 1.18)
+        im = Image.new("RGBA", (W, lh * len(ls) + 20), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        for j, l in enumerate(ls):
+            d.text((W / 2, 10 + j * lh + lh / 2), l, font=f, fill=(255, 255, 255, 255), anchor="mm",
+                   stroke_width=3, stroke_fill=(0, 0, 0, 120))
+        return im
+
+    def catch_card(text):
+        f, ls = fit_font(text, "mont", 820, 260, 50, 32, 750, 1.18)
+        lh = int(f.size * 1.18)
+        im = Image.new("RGBA", (920, lh * len(ls) + 110), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        d.rounded_rectangle([0, 0, 919, im.height - 1], 36, fill=(15, 10, 20, 225), outline=accent, width=6)
+        d.text((460, 38), "THE CATCH", font=font("mont", 34, 850), fill=accent, anchor="mm")
+        for j, l in enumerate(ls):
+            d.text((460, 78 + j * lh + lh / 2), l, font=f, fill=(255, 255, 255, 255), anchor="mm")
+        return im
+
+    cards = {s["i"]: (opt_card(s["q"]["a"]), opt_card(s["q"]["b"]),
+                      catch_card(s["q"]["a_catch"]) if s["q"].get("a_catch") else None,
+                      catch_card(s["q"]["b_catch"]) if s["q"].get("b_catch") else None)
+             for s in segs if s["kind"] == "q"}
+    of, ol = fit_font(outro.upper(), "anton", 940, 700, 110, 60)
+    olh = int(of.size * 1.12)
+    outro_img = Image.new("RGBA", (W, olh * len(ol) + 40), (0, 0, 0, 0)); d0 = ImageDraw.Draw(outro_img)
+    for j, l in enumerate(ol):
+        d0.text((W / 2, 20 + j * olh + olh / 2), l, font=of, fill=(255, 255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(10, 10, 20, 255))
+    nq = len(qs)
+
+    def frame(f):
+        t = f / FPS
+        img = Image.new("RGBA", (W, H)); img.alpha_composite(top, (0, 0)); img.alpha_composite(bot, (0, H // 2))
+        d = ImageDraw.Draw(img)
+        seg = next((s for s in segs if s["t0"] <= t < s["t1"]), segs[-1])
+        if seg["kind"] == "outro":
+            paste_scaled(img, outro_img, W / 2, H / 2, 0.7 + 0.3 * back((t - seg["t0"]) / 0.35))
+            return img
+        i, lt = seg["i"], t - seg["t0"]
+        A, B, CA, CB = cards[i]
+        first = (i == 0)
+        # option A (top) and B (bottom) slide in; B arrives when it is read
+        ka = 1.0 if first else back(lt / 0.35)
+        kb = 1.0 if first else back((t - seg["b0"] + 0.15) / 0.35)
+        revealed = t >= seg["r0"]
+        ya = H * 0.25 - (60 if CA is not None and revealed else 0)
+        yb = H * 0.75 - (60 if CB is not None and revealed else 0)
+        paste_scaled(img, A, W / 2 - (1 - min(1, ka)) * W, ya, 1.0)
+        if kb > 0:
+            paste_scaled(img, B, W / 2 + (1 - min(1, kb)) * W, yb, 1.0)
+        for (ltr, by) in (("A", H / 2 - 85), ("B", H / 2 + 85)):
+            bx = 95
+            d.ellipse([bx - 48, by - 48, bx + 48, by + 48], fill=(15, 10, 20, 255), outline=(255, 255, 255, 255), width=5)
+            d.text((bx, by + 2), ltr, font=font("anton", 62), fill=(255, 255, 255, 255), anchor="mm")
+        # header pill
+        hdr = f"{label}  {i + 1}/{nq}"
+        hf = font("mont", 40, 850); hw = tw(hdr, hf) + 80
+        d.rounded_rectangle([W / 2 - hw / 2, 110, W / 2 + hw / 2, 190], 40, fill=(255, 255, 255, 235))
+        d.text((W / 2, 150), hdr, font=hf, fill=(20, 15, 30, 255), anchor="mm")
+        # centre badge: OR / countdown
+        R = 105; cy = H / 2
+        d.ellipse([W / 2 - R, cy - R, W / 2 + R, cy + R], fill=(15, 10, 20, 255), outline=(255, 255, 255, 255), width=8)
+        if seg["c0"] <= t < seg["r0"]:
+            el = t - seg["c0"]
+            d.arc([W / 2 - R + 6, cy - R + 6, W / 2 + R - 6, cy + R - 6], -90, -90 + 360 * (1 - el / seg["secs"]), fill=accent, width=16)
+            pulse = 1 + 0.12 * max(0, 1 - (el % 1) / 0.25)
+            d.text((W / 2, cy), str(seg["secs"] - int(el)), font=font("anton", int(110 * pulse)), fill=(255, 255, 255, 255), anchor="mm")
+        else:
+            d.text((W / 2, cy), "OR", font=font("anton", 80), fill=(255, 255, 255, 255), anchor="mm")
+        if revealed:
+            for card, tc, base in ((CA, seg["ca"], H * 0.25), (CB, seg["cb"], H * 0.75)):
+                if card is not None and tc is not None and t >= tc - 0.15:
+                    k = back((t - tc + 0.15) / 0.3)
+                    paste_scaled(img, card, W / 2, base + A.height / 2 + card.height / 2 - 10, max(0.01, 0.6 + 0.4 * k))
+        return img
+
+    qsegs = [s for s in segs if s["kind"] == "q"]
+    times = [0.3, qsegs[0]["c0"] + 1.2, (qsegs[0]["cb"] or qsegs[0]["ca"] or qsegs[0]["r0"]) + 1.0,
+             qsegs[-1]["c0"] + 1.0, dur - 0.5]
+    return run(frame, n, vw, aw, out, preview, times), dur
+
+
+RENDERERS = {"chat": render_chat, "quiz": render_quiz, "wyr": render_wyr}
 
 
 def render(story, out, models, preview=None):
