@@ -1,0 +1,17 @@
+{
+ "style": "quiz",
+ "title": "4 Trick Questions That Fool Almost Everyone #shorts #brainteaser",
+ "theme": "orange",
+ "label": "QUESTION",
+ "description": "Don't overthink it. Most people get number 4 wrong.\n\n#riddles #brainteaser #quiz #shorts",
+ "tags": ["riddles", "brain teasers", "trick questions", "quiz", "riddles with answers", "shorts"],
+ "voice": "narrator_f",
+ "music": "upbeat",
+ "questions": [
+  {"q": "A rooster lays an egg on top of a roof. Which way does it roll?", "a": "It doesn't", "options": ["Left", "Right", "Straight down", "It doesn't"], "seconds": 3, "why": "Roosters don't lay eggs."},
+  {"q": "Some months have 31 days. How many have 28?", "a": "All of them", "seconds": 4},
+  {"q": "A plane crashes right on the border of two countries. Where do they bury the survivors?", "a": "Nowhere", "seconds": 4, "why": "You don't bury survivors."},
+  {"q": "In a race, you pass the person in 2nd place. What place are you in now?", "a": "2nd", "options": ["1st", "2nd", "3rd", "Last"], "seconds": 5, "why": "You took their spot, not first."}
+ ],
+ "outro": "How many did you get? Comment your score."
+}
