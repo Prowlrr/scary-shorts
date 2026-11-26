@@ -1,0 +1,147 @@
+{
+ "title": "The Radio Said I'd Been Missing for Three Days #shorts #scarystories",
+ "description": "I only pulled over by the lake for five minutes. The diner's guest book says otherwise.\n\nFollow for new scary stories every day.\n\n#scarystory #horrorstories #creepy #shorts",
+ "tags": [
+  "scary stories",
+  "missing time",
+  "creepy",
+  "horror shorts",
+  "short horror story",
+  "shorts"
+ ],
+ "season": "summer",
+ "ambience": "crickets",
+ "voice": "british_m",
+ "speed": 1.0,
+ "beats": [
+  {
+   "text": "The radio said I'd been missing for three days. I'd pulled over for five minutes.",
+   "scene": "road",
+   "people": 0,
+   "hook": "glitch",
+   "overlay": {
+    "type": "alert",
+    "header": "RADIO BULLETIN",
+    "lines": [
+     "DRIVER MISSING",
+     "3 DAYS"
+    ],
+    "red": [
+     1
+    ]
+   }
+  },
+  {
+   "text": "Hot summer night. I'd stopped by the lake to stretch.",
+   "scene": "lake",
+   "people": 0
+  },
+  {
+   "text": "Then the crickets went silent. All at once.",
+   "scene": "lake",
+   "people": 0,
+   "figure": true
+  },
+  {
+   "text": "A white light hung over the water. Not a sound.",
+   "scene": "lake",
+   "people": 0,
+   "flicker": true,
+   "shake": true,
+   "transition": "flash"
+  },
+  {
+   "text": "I blinked. Battery dead. The clock said two fourteen.",
+   "scene": "road",
+   "people": 0,
+   "mood": "scared",
+   "overlay": {
+    "type": "clock",
+    "time": "2:14 AM"
+   }
+  },
+  {
+   "text": "So I walked to the only lights on the road.",
+   "scene": "street",
+   "people": 0,
+   "transition": "fade"
+  },
+  {
+   "text": "An all-night diner.",
+   "scene": "door",
+   "overlay": {
+    "type": "sign",
+    "name": "LAKESIDE DINER",
+    "sub": "Open all night"
+   }
+  },
+  {
+   "text": "The waitress poured my coffee before I ordered.",
+   "scene": "kitchen",
+   "people": 2
+  },
+  {
+   "text": "She said, you look better than last time.",
+   "scene": "kitchen",
+   "people": 2,
+   "mood": "scared"
+  },
+  {
+   "text": "I'd never been here. She turned the guest book around.",
+   "scene": "kitchen",
+   "people": 1
+  },
+  {
+   "text": "My name. My handwriting. Forty-one times.",
+   "scene": "kitchen",
+   "people": 1,
+   "shake": true,
+   "overlay": {
+    "type": "label",
+    "text": "41 ENTRIES"
+   }
+  },
+  {
+   "text": "Every line said the same thing. Don't go back to the lake.",
+   "scene": "kitchen",
+   "people": 1,
+   "overlay": {
+    "type": "label",
+    "text": "DON'T GO BACK TO THE LAKE"
+   }
+  },
+  {
+   "text": "I wrote it again.",
+   "scene": "kitchen",
+   "people": 1
+  },
+  {
+   "text": "Outside, the crickets stopped.",
+   "scene": "window",
+   "figure": true,
+   "flicker": true
+  },
+  {
+   "text": "The white light was waiting over the parking lot.",
+   "scene": "town",
+   "people": 0,
+   "shake": true,
+   "transition": "glitch"
+  },
+  {
+   "text": "I woke up in my car, by the water, engine running.",
+   "scene": "lake",
+   "people": 0,
+   "transition": "fade"
+  },
+  {
+   "text": "Then the radio crackled on.",
+   "scene": "road",
+   "people": 0,
+   "mood": "scared",
+   "sfx": [
+    "static"
+   ]
+  }
+ ]
+}
