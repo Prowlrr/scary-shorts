@@ -1,0 +1,40 @@
+{
+ "style": "wyr",
+ "title": "Would You Rather… (But Every Choice Is a Trap) #shorts #wouldyourather",
+ "description": "Pick one. Then read the catch. Which one could you actually survive?\n\n#wouldyourather #thisorthat #quiz #shorts",
+ "tags": [
+  "would you rather",
+  "would you rather scary",
+  "this or that",
+  "choose one",
+  "shorts"
+ ],
+ "theme": "night",
+ "voice": "male2",
+ "speed": 1.0,
+ "music": "tense",
+ "ambience": "musicbox",
+ "scary": true,
+ "questions": [
+  {
+   "a": "Hear your name whispered when you're alone",
+   "b": "See a stranger in every photo you take",
+   "seconds": 3,
+   "a_catch": "The whisper always comes from right behind you."
+  },
+  {
+   "a": "Get a phone call from yourself",
+   "b": "Get a letter from yourself",
+   "seconds": 3,
+   "b_catch": "It's dated next week and says: run tonight."
+  },
+  {
+   "a": "Be the last person awake in town",
+   "b": "Be the only person who can't sleep",
+   "seconds": 4,
+   "a_catch": "Everyone else is only pretending to sleep, and watching you.",
+   "b_catch": "The sleepers walk at night, and they hear you."
+  }
+ ],
+ "outro": "A or B? Tell me which one you'd survive."
+}
